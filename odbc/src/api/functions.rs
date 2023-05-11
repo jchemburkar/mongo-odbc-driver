@@ -588,11 +588,15 @@ pub unsafe extern "C" fn SQLColAttributeW(
                     numeric_col_attr(&|x: &MongoColMetadata| x.sql_type as Len)
                 }
                 Desc::Unsigned => numeric_col_attr(&|x: &MongoColMetadata| x.is_unsigned as Len),
+                Desc::AllocType => {
+                    *numeric_attribute_ptr = 0 as Len;
+                    SqlReturn::SUCCESS
+                }
                 desc @ (Desc::OctetLengthPtr
                 | Desc::DatetimeIntervalCode
                 | Desc::IndicatorPtr
                 | Desc::DataPtr
-                | Desc::AllocType
+                // | Desc::AllocType
                 | Desc::ArraySize
                 | Desc::ArrayStatusPtr
                 | Desc::BindOffsetPtr
