@@ -65,8 +65,8 @@ pub enum ODBCError {
     InvalidSqlType(String),
     #[error("[{}][API] Invalid handle type, expected {0}", VENDOR_IDENTIFIER)]
     InvalidHandleType(&'static str),
-    #[error("[{}][API] Invalid value for attribute {0}", VENDOR_IDENTIFIER)]
-    InvalidAttrValue(&'static str),
+    #[error("[{}][API] Invalid value for attribute {0}, value: {1}", VENDOR_IDENTIFIER)]
+    InvalidAttrValue(&'static str, i32),
     #[error("[{}][API] Invalid attribute identifier {0}", VENDOR_IDENTIFIER)]
     InvalidAttrIdentifier(i32),
     #[error("[{}][API] Invalid target type {0}", VENDOR_IDENTIFIER)]
@@ -144,7 +144,7 @@ impl ODBCError {
             ODBCError::General(_) | ODBCError::Panic(_) => GENERAL_ERROR,
             ODBCError::GeneralWarning(_) => GENERAL_WARNING,
             ODBCError::Core(c) => c.get_sql_state(),
-            ODBCError::InvalidAttrValue(_) => INVALID_ATTR_VALUE,
+            ODBCError::InvalidAttrValue(_, _) => INVALID_ATTR_VALUE,
             ODBCError::InvalidAttrIdentifier(_) => INVALID_ATTRIBUTE_OR_OPTION_IDENTIFIER,
             ODBCError::InvalidCursorState => INVALID_CURSOR_STATE,
             ODBCError::InvalidHandleType(_) => NOT_IMPLEMENTED,
@@ -179,7 +179,7 @@ impl ODBCError {
             | ODBCError::GeneralWarning(_)
             | ODBCError::Panic(_)
             | ODBCError::UnimplementedDataType(_)
-            | ODBCError::InvalidAttrValue(_)
+            | ODBCError::InvalidAttrValue(_, _)
             | ODBCError::InvalidAttrIdentifier(_)
             | ODBCError::InvalidCursorState
             | ODBCError::InvalidHandleType(_)

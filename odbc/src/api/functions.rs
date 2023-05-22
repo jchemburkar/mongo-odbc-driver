@@ -3646,7 +3646,7 @@ unsafe fn sql_set_env_attrw_helper(
                 None => {
                     add_diag_with_function!(
                         env_handle,
-                        ODBCError::InvalidAttrValue("SQL_ATTR_ODBC_VERSION"),
+                        ODBCError::InvalidAttrValue("SQL_ATTR_ODBC_VERSION", value_ptr as i32),
                         "SQLSetEnvAttrW"
                     );
                     SqlReturn::ERROR
@@ -3787,7 +3787,7 @@ unsafe fn sql_set_stmt_attrw_helper(
                 Some(CursorScrollable::NonScrollable) => SqlReturn::SUCCESS,
                 _ => {
                     stmt_handle
-                        .add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_CURSOR_SCROLLABLE"));
+                        .add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_CURSOR_SCROLLABLE", value_ptr as i32));
                     SqlReturn::ERROR
                 }
             }
@@ -3797,7 +3797,7 @@ unsafe fn sql_set_stmt_attrw_helper(
                 Some(CursorSensitivity::Insensitive) => SqlReturn::SUCCESS,
                 _ => {
                     stmt_handle
-                        .add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_CURSOR_SENSITIVITY"));
+                        .add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_CURSOR_SENSITIVITY", value_ptr as i32));
                     SqlReturn::ERROR
                 }
             }
@@ -3851,7 +3851,7 @@ unsafe fn sql_set_stmt_attrw_helper(
         StatementAttribute::SQL_ATTR_NOSCAN => {
             match FromPrimitive::from_i32(value_ptr as i32) {
                 Some(ns) => stmt.attributes.write().unwrap().no_scan = ns,
-                None => stmt_handle.add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_NOSCAN")),
+                None => stmt_handle.add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_NOSCAN", value_ptr as i32)),
             }
             SqlReturn::SUCCESS
         }
@@ -3888,7 +3888,7 @@ unsafe fn sql_set_stmt_attrw_helper(
                 Some(RetrieveData::Off) => SqlReturn::SUCCESS,
                 _ => {
                     stmt_handle
-                        .add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_RETRIEVE_DATA"));
+                        .add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_RETRIEVE_DATA", value_ptr as i32));
                     SqlReturn::ERROR
                 }
             }
@@ -3925,7 +3925,7 @@ unsafe fn sql_set_stmt_attrw_helper(
                 }
                 None => {
                     stmt_handle
-                        .add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_ROW_ARRAY_SIZE"));
+                        .add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_ROW_ARRAY_SIZE", value_ptr as i32));
                     SqlReturn::ERROR
                 }
             }
@@ -3942,7 +3942,7 @@ unsafe fn sql_set_stmt_attrw_helper(
                 }
                 None => {
                     stmt_handle
-                        .add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_USE_BOOKMARKS"));
+                        .add_diag_info(ODBCError::InvalidAttrValue("SQL_ATTR_USE_BOOKMARKS", value_ptr as i32));
                     SqlReturn::ERROR
                 }
             }
