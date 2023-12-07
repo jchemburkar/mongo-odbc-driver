@@ -4,6 +4,7 @@ mod test_connection;
 use fancy_regex::Regex as FancyRegex;
 use lazy_static::lazy_static;
 use mongodb::results::CollectionType;
+use crate::definitions::SqlDataType;
 use regex::{Regex, RegexSet, RegexSetBuilder};
 
 pub(crate) const TABLE: &str = "TABLE";
@@ -48,6 +49,23 @@ pub(crate) fn is_match(name: &str, filter: &str, accept_search_patterns: bool) -
         true => match to_name_regex(filter) {
             Some(regex) => regex.is_match(name),
             None => true,
+        },
+    }
+}
+
+/// is_match compares `name` to `filter` either directly or via regex, depending on
+/// the value `accept_search_patterns`. Empty strings for filters will match everything.
+pub fn handle_sql_type(map_datetime_types: bool, sql_type: SqlDataType) -> SqlDataType {
+    match map_datetime_types {
+        false => sql_type,
+        true => match sql_type {
+            // code for SQL_DATE from ODBC 2 is used as SQL_DATETIME in ODBC 3
+            SqlDataType::DATE => SqlDataType::DATETIME,
+            // code for SQL_TIME from ODBC 2 is used as SQL_EXT_TIME_OR_INTERVAL in ODBC 3
+            SqlDataType::TIME => SqlDataType::EXT_TIME_OR_INTERVAL,
+            // code for SQL_TIMESTAMP from ODBC 2 is used as SQL_EXT_TIMESTAMP in ODBC 3
+            SqlDataType::TIMESTAMP => SqlDataType::EXT_TIMESTAMP,
+            v => v
         },
     }
 }

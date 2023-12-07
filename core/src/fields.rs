@@ -459,6 +459,7 @@ pub struct MongoFields {
     collection_name_filter: Option<Regex>,
     field_name_filter: Option<Regex>,
     type_mode: TypeMode,
+    map_datetime_types: bool,
 }
 
 // Statement related to a SQLTables call.
@@ -476,6 +477,7 @@ impl MongoFields {
         collection_name_filter: Option<&str>,
         field_name_filter: Option<&str>,
         type_mode: TypeMode,
+        map_datetime_types: bool,
     ) -> Self {
         let dbs = db_name.map_or_else(
             || {
@@ -505,6 +507,7 @@ impl MongoFields {
             collection_name_filter: collection_name_filter.and_then(to_name_regex),
             field_name_filter: field_name_filter.and_then(to_name_regex),
             type_mode,
+            map_datetime_types,
         }
     }
 
@@ -518,6 +521,7 @@ impl MongoFields {
             collection_name_filter: None,
             field_name_filter: None,
             type_mode: TypeMode::Standard,
+            map_datetime_types: false,
         }
     }
 
