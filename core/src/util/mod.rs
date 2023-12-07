@@ -1,10 +1,10 @@
 use bson::doc;
 use constants::SQL_ALL_TABLE_TYPES;
 mod test_connection;
+use crate::definitions::SqlDataType;
 use fancy_regex::Regex as FancyRegex;
 use lazy_static::lazy_static;
 use mongodb::results::CollectionType;
-use crate::definitions::SqlDataType;
 use regex::{Regex, RegexSet, RegexSetBuilder};
 
 pub(crate) const TABLE: &str = "TABLE";
@@ -65,7 +65,7 @@ pub fn handle_sql_type(map_datetime_types: bool, sql_type: SqlDataType) -> SqlDa
             SqlDataType::TIME => SqlDataType::EXT_TIME_OR_INTERVAL,
             // code for SQL_TIMESTAMP from ODBC 2 is used as SQL_EXT_TIMESTAMP in ODBC 3
             SqlDataType::TIMESTAMP => SqlDataType::EXT_TIMESTAMP,
-            v => v
+            v => v,
         },
     }
 }

@@ -1,6 +1,6 @@
 use crate::{
     col_metadata::MongoColMetadata, conn::MongoConnection, definitions::SqlDataType, err::Result,
-    stmt::MongoStatement, BsonTypeInfo, Error, TypeMode,
+    stmt::MongoStatement, util::handle_sql_type, BsonTypeInfo, Error, TypeMode,
 };
 use bson::Bson;
 use odbc_sys::Nullability;
@@ -174,14 +174,20 @@ pub struct MongoTypesInfo {
     current_type_index: usize,
     sql_data_type: SqlDataType,
     type_mode: TypeMode,
+    map_datetime_types: bool,
 }
 
 impl MongoTypesInfo {
-    pub fn new(sql_data_type: SqlDataType, type_mode: TypeMode) -> MongoTypesInfo {
+    pub fn new(
+        sql_data_type: SqlDataType,
+        type_mode: TypeMode,
+        map_datetime_types: bool,
+    ) -> MongoTypesInfo {
         MongoTypesInfo {
             current_type_index: 0,
             sql_data_type,
             type_mode,
+            map_datetime_types,
         }
     }
 }
@@ -232,7 +238,10 @@ impl MongoStatement for MongoTypesInfo {
         match DATA_TYPES.get(self.current_type_index - 1) {
             Some(type_info) => Ok(Some(match col_index {
                 1 | 13 => Bson::String(type_info.type_name.to_string()),
-                2 | 16 => Bson::Int32(type_info.sql_type(self.type_mode) as i32),
+                2 | 16 => Bson::Int32(handle_sql_type(
+                    self.map_datetime_types,
+                    type_info.sql_type(self.type_mode),
+                ) as i32),
                 3 => match type_info.precision(self.type_mode) {
                     Some(precision) => Bson::Int32(precision as i32),
                     None => Bson::Null,

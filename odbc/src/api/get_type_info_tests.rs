@@ -94,10 +94,7 @@ mod unit {
                 SqlReturn::SUCCESS,
                 SQLGetTypeInfoW(stmt_handle as *mut _, SqlDataType::EXT_TIMESTAMP as i16)
             );
-            assert_eq!(
-                SqlReturn::SUCCESS,
-                SQLFetch(stmt_handle as *mut _)
-            );
+            assert_eq!(SqlReturn::SUCCESS, SQLFetch(stmt_handle as *mut _));
             let value = stmt
                 .mongo_statement
                 .write()

@@ -22,9 +22,9 @@ use function_name::named;
 use log::{debug, error, info};
 use logger::Logger;
 use mongo_odbc_core::{
-    util::handle_sql_type, odbc_uri::ODBCUri, MongoColMetadata, MongoCollections, MongoConnection, MongoDatabases,
-    MongoFields, MongoForeignKeys, MongoPrimaryKeys, MongoQuery, MongoStatement, MongoTableTypes,
-    MongoTypesInfo, SqlDataType, TypeMode,
+    odbc_uri::ODBCUri, util::handle_sql_type, MongoColMetadata, MongoCollections, MongoConnection,
+    MongoDatabases, MongoFields, MongoForeignKeys, MongoPrimaryKeys, MongoQuery, MongoStatement,
+    MongoTableTypes, MongoTypesInfo, SqlDataType, TypeMode,
 };
 use num_traits::FromPrimitive;
 use odbc_sys::{
@@ -565,9 +565,9 @@ pub unsafe extern "C" fn SQLColAttributeW(
                 Desc::Searchable => numeric_col_attr(&|x: &MongoColMetadata| x.searchable as Len),
                 Desc::TableName => string_col_attr(&|x: &MongoColMetadata| x.table_name.as_ref()),
                 Desc::TypeName => string_col_attr(&|x: &MongoColMetadata| x.type_name.as_ref()),
-                Desc::Type | Desc::ConciseType => {
-                    numeric_col_attr(&|x: &MongoColMetadata| handle_sql_type(map_datetime_types, x.sql_type) as Len)
-                }
+                Desc::Type | Desc::ConciseType => numeric_col_attr(&|x: &MongoColMetadata| {
+                    handle_sql_type(map_datetime_types, x.sql_type) as Len
+                }),
                 Desc::Unsigned => numeric_col_attr(&|x: &MongoColMetadata| x.is_unsigned as Len),
                 desc @ (Desc::OctetLengthPtr
                 | Desc::DatetimeIntervalCode
@@ -2617,6 +2617,7 @@ pub unsafe extern "C" fn SQLGetTypeInfoW(handle: HStmt, data_type: SmallInt) -> 
         debug,
         || {
             let mongo_handle = MongoHandleRef::from(handle);
+            let map_datetime_types = !has_odbc_3_behavior!(mongo_handle);
             match FromPrimitive::from_i16(data_type) {
                 Some(sql_data_type) => {
                     let stmt = must_be_valid!((*mongo_handle).as_statement());
@@ -2626,7 +2627,8 @@ pub unsafe extern "C" fn SQLGetTypeInfoW(handle: HStmt, data_type: SmallInt) -> 
                         let connection = must_be_valid!((*stmt.connection).as_connection());
                         *connection.type_mode.read().unwrap()
                     };
-                    let types_info = MongoTypesInfo::new(sql_data_type, type_mode);
+                    let types_info =
+                        MongoTypesInfo::new(sql_data_type, type_mode, map_datetime_types);
                     *stmt.mongo_statement.write().unwrap() = Some(Box::new(types_info));
                     SqlReturn::SUCCESS
                 }
