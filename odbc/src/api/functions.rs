@@ -3,12 +3,12 @@ use crate::{
     api::{
         data::{i16_len, i32_len, ptr_safe_write},
         definitions::*,
-        diag::{get_diag_field, get_diag_recw, get_stmt_diag_field},
+        diag::{get_diag_fieldw, get_diag_recw, get_stmt_diag_field},
         errors::{ODBCError, Result},
         util::{connection_attribute_to_string, statement_attribute_to_string},
     },
     handles::definitions::*,
-    trace_odbc,
+    has_odbc_3_behavior, trace_odbc,
 };
 use bson::Bson;
 use constants::{
@@ -125,10 +125,10 @@ macro_rules! odbc_unwrap {
     }};
 }
 
-// panic_safe_exec_clear_diagnostics executes `function` such that any panics do not crash the runtime,
-// while clearing any diagnostics in the $handle's error vec.
-// If a panic occurs during execution, the panic is caught and turned into a String.
-// The panic message is added to the diagnostics of `handle` and SqlReturn::ERROR returned.
+/// panic_safe_exec_clear_diagnostics executes `function` such that any panics do not crash the runtime,
+/// while clearing any diagnostics in the $handle's error vec.
+/// If a panic occurs during execution, the panic is caught and turned into a String.
+/// The panic message is added to the diagnostics of `handle` and SqlReturn::ERROR returned.
 macro_rules! panic_safe_exec_clear_diagnostics {
     ($level:ident, $function:expr, $handle:expr) => {{
         use crate::panic_safe_exec_keep_diagnostics;
@@ -140,10 +140,10 @@ macro_rules! panic_safe_exec_clear_diagnostics {
 }
 pub(crate) use panic_safe_exec_clear_diagnostics;
 
-// panic_safe_exec_keep_diagnostics executes `function` such that any panics do not crash the runtime,
-// while retaining any diagnostics in the provided $handle's errors vec.
-// If a panic occurs during execution, the panic is caught and turned into a String.
-// The panic message is added to the diagnostics of `handle` and SqlReturn::ERROR returned.
+/// panic_safe_exec_keep_diagnostics executes `function` such that any panics do not crash the runtime,
+/// while retaining any diagnostics in the provided $handle's errors vec.
+/// If a panic occurs during execution, the panic is caught and turned into a String.
+/// The panic message is added to the diagnostics of `handle` and SqlReturn::ERROR returned.
 macro_rules! panic_safe_exec_keep_diagnostics {
     ($level:ident, $function:expr, $handle:expr) => {{
         let function = $function;
@@ -1614,10 +1614,12 @@ pub unsafe extern "C" fn SQLGetDiagFieldW(
         debug,
         || {
             let mongo_handle = handle as *mut MongoHandle;
+            let odbc_version = (*mongo_handle).get_odbc_version();
             let get_error = |errors: &Vec<ODBCError>, diag_identifier: DiagType| -> SqlReturn {
-                get_diag_field(
+                get_diag_fieldw(
                     errors,
                     diag_identifier,
+                    odbc_version,
                     diag_info_ptr,
                     record_number,
                     buffer_length,
@@ -1678,6 +1680,7 @@ macro_rules! sql_get_diag_rec_impl {
                     return SqlReturn::ERROR;
                 }
                 let mongo_handle = $handle as *mut MongoHandle;
+                let odbc_version = (*mongo_handle).get_odbc_version();
                 // Make the record number zero-indexed
                 let rec_number = ($rec_number - 1) as usize;
 
@@ -1686,6 +1689,7 @@ macro_rules! sql_get_diag_rec_impl {
                         Some(odbc_err) => $error_output_func(
                             odbc_err,
                             $state,
+                            odbc_version,
                             $message_text,
                             $buffer_length,
                             $text_length_ptr,
@@ -3502,6 +3506,7 @@ fn sql_tables(
     schema: &str,
     table: &str,
     table_t: &str,
+    odbc_3_behavior: bool,
 ) -> Result<Box<dyn MongoStatement>> {
     match (catalog, schema, table, table_t) {
         (SQL_ALL_CATALOGS, "", "", "") => Ok(Box::new(MongoDatabases::list_all_catalogs(
@@ -3516,6 +3521,7 @@ fn sql_tables(
             catalog,
             table,
             table_t,
+            odbc_3_behavior,
         ))),
     }
 }
@@ -3545,6 +3551,7 @@ pub unsafe extern "C" fn SQLTablesW(
         debug,
         || {
             let mongo_handle = MongoHandleRef::from(statement_handle);
+            let odbc_behavior = has_odbc_3_behavior!(mongo_handle);
             let stmt = must_be_valid!((*mongo_handle).as_statement());
             let catalog = input_text_to_string_w(catalog_name, name_length_1 as usize);
             let schema = input_text_to_string_w(schema_name, name_length_2 as usize);
@@ -3565,6 +3572,7 @@ pub unsafe extern "C" fn SQLTablesW(
                 &schema,
                 &table,
                 &table_t,
+                odbc_behavior,
             );
             let mongo_statement = odbc_unwrap!(mongo_statement, mongo_handle);
             *stmt.mongo_statement.write().unwrap() = Some(mongo_statement);
