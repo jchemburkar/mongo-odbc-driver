@@ -1,4 +1,8 @@
-use crate::{definitions::DiagType, handles::definitions::*, SQLGetDiagFieldW, SQLGetTypeInfoW};
+use crate::{
+    definitions::{DiagType, OdbcVersion},
+    handles::definitions::*,
+    SQLFetch, SQLGetDiagFieldW, SQLGetTypeInfoW,
+};
 use mongo_odbc_core::SqlDataType;
 use odbc_sys::{HandleType::Stmt, SqlReturn};
 
@@ -59,6 +63,48 @@ mod unit {
                 .as_ref()
                 .unwrap()
                 .get_value(1);
+            assert!(value.is_err());
+        }
+    }
+
+    #[test]
+    fn test_odbc_2_datatime_datatypes() {
+        // checks for invalid cursor state when calling get_value before next
+        let env_handle: &mut MongoHandle =
+            &mut MongoHandle::Env(Env::with_state(EnvState::Allocated));
+        env_handle
+            .as_env()
+            .unwrap()
+            .attributes
+            .write()
+            .unwrap()
+            .odbc_ver = OdbcVersion::Odbc2;
+        let conn_handle: *mut _ = &mut MongoHandle::Connection(Connection::with_state(
+            env_handle,
+            ConnectionState::Allocated,
+        ));
+        let stmt_handle: *mut _ = &mut MongoHandle::Statement(Statement::with_state(
+            conn_handle,
+            StatementState::Allocated,
+        ));
+        unsafe {
+            let stmt = (*stmt_handle).as_statement().unwrap();
+            assert_eq!(
+                SqlReturn::SUCCESS,
+                SQLGetTypeInfoW(stmt_handle as *mut _, SqlDataType::EXT_TIMESTAMP as i16)
+            );
+            assert_eq!(
+                SqlReturn::SUCCESS,
+                SQLFetch(stmt_handle as *mut _)
+            );
+            let value = stmt
+                .mongo_statement
+                .write()
+                .unwrap()
+                .as_ref()
+                .unwrap()
+                .get_value(1);
+            println!("{:?}", value);
             assert!(value.is_err());
         }
     }
