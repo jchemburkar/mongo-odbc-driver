@@ -442,6 +442,7 @@ pub unsafe extern "C" fn SQLBulkOperations(
 #[named]
 #[no_mangle]
 pub unsafe extern "C" fn SQLCancel(statement_handle: HStmt) -> SqlReturn {
+    // unimpl!(statement_handle);
     SqlReturn::SUCCESS
 }
 
@@ -1361,6 +1362,7 @@ fn sql_free_handle(handle_type: HandleType, handle: *mut MongoHandle) -> Result<
 #[named]
 #[no_mangle]
 pub unsafe extern "C" fn SQLFreeStmt(statement_handle: HStmt, _option: SmallInt) -> SqlReturn {
+    // unimpl!(statement_handle);
     SqlReturn::SUCCESS
 }
 
