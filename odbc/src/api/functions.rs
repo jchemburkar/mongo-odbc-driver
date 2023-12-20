@@ -337,13 +337,41 @@ fn sql_alloc_handle(
 #[no_mangle]
 pub unsafe extern "C" fn SQLBindCol(
     hstmt: HStmt,
-    _col_number: USmallInt,
-    _target_type: SmallInt,
-    _target_value: Pointer,
-    _buffer_length: Len,
-    _length_or_indicatior: *mut Len,
+    col_number: USmallInt,
+    target_type: SmallInt,
+    target_value: Pointer,
+    buffer_length: Len,
+    length_or_indicatior: *mut Len,
 ) -> SqlReturn {
-    unimpl!(hstmt);
+    //unimpl!(hstmt);
+    panic_safe_exec_keep_diagnostics!(
+        debug,
+        || {
+            let mongo_handle = MongoHandleRef::from(hstmt);
+            let stmt = must_be_valid!((*mongo_handle).as_statement());
+
+            if stmt.bound_cols.read().unwrap().is_none() {
+                *stmt.bound_cols.write().unwrap() = Some(HashMap::new());
+            }
+
+            let bound_col_info = BoundColInfo {
+                target_type,
+                target_buffer: target_value,
+                buffer_length,
+                length_or_indicatior,
+            };
+
+            stmt.bound_cols
+                .write()
+                .unwrap()
+                .as_mut()
+                .unwrap()
+                .insert(col_number, bound_col_info);
+
+            SqlReturn::SUCCESS
+        },
+        hstmt
+    );
 }
 
 ///
@@ -1139,7 +1167,31 @@ pub unsafe extern "C" fn SQLFetch(statement_handle: HStmt) -> SqlReturn {
 
                 *stmt.var_data_cache.write().unwrap() = Some(HashMap::new());
 
-                if !warnings_opt.is_empty() {
+                let mut success_with_info_encountered = false;
+
+                if stmt.bound_cols.read().unwrap().is_some() {
+                    let mongo_handle_for_sql_get_data_helper = MongoHandleRef::from(statement_handle);
+
+                    for (col, bound_col_info) in stmt.bound_cols.read().unwrap().as_ref().unwrap().iter() {
+                        let sql_return = sql_get_data_helper(
+                            mongo_handle_for_sql_get_data_helper,
+                            *col,
+                            FromPrimitive::from_i16(bound_col_info.target_type).unwrap(),
+                            bound_col_info.target_buffer,
+                            bound_col_info.buffer_length,
+                            bound_col_info.length_or_indicatior,
+                        );
+
+                        match sql_return {
+                            SqlReturn::ERROR => return SqlReturn::ERROR,
+                            SqlReturn::SUCCESS_WITH_INFO => {
+                                success_with_info_encountered = true;
+                            }
+                            _ => {}
+                        }
+                    }
+                }
+                if !warnings_opt.is_empty() || success_with_info_encountered {
                     // No warnings and there is a next row
                     SqlReturn::SUCCESS_WITH_INFO
                 } else {
