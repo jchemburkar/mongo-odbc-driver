@@ -7,26 +7,26 @@ pub enum SqlBool {
 }
 
 // Environment attributes
-#[derive(Copy, Clone, Debug, PartialEq, Eq, FromPrimitive)]
-pub enum OdbcVersion {
-    Odbc2 = 2,
-    Odbc3 = 3,
-    Odbc3_80 = 380,
-}
+// #[derive(Copy, Clone, Debug, PartialEq, Eq, FromPrimitive)]
+// pub enum OdbcVersion {
+//     Odbc2 = 2,
+//     Odbc3 = 3,
+//     Odbc3_80 = 380,
+// }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, FromPrimitive)]
-pub enum ConnectionPooling {
-    Off = 0,
-    OnePerDriver,
-    OnePerHEnv,
-    DriverAware,
-}
+// #[derive(Copy, Clone, Debug, PartialEq, Eq, FromPrimitive)]
+// pub enum ConnectionPooling {
+//     Off = 0,
+//     OnePerDriver,
+//     OnePerHEnv,
+//     DriverAware,
+// }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, FromPrimitive)]
-pub enum CpMatch {
-    Strict = 0,
-    Relaxed,
-}
+// #[derive(Copy, Clone, Debug, PartialEq, Eq, FromPrimitive)]
+// pub enum CpMatch {
+//     Strict = 0,
+//     Relaxed,
+// }
 
 // Statement attributes
 
@@ -151,141 +151,141 @@ pub enum EnvironmentAttribute {
     SQL_ATTR_DRIVER_UNICODE_TYPE = 1065,
 }
 
-#[allow(non_camel_case_types)]
-#[repr(i32)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
-pub enum StatementAttribute {
-    SQL_ATTR_CURSOR_SCROLLABLE = -1,
-    SQL_ATTR_CURSOR_SENSITIVITY = -2,
-    SQL_ATTR_QUERY_TIMEOUT = 0,
-    SQL_ATTR_MAX_ROWS = 1,
-    SQL_ATTR_NOSCAN = 2,
-    SQL_ATTR_MAX_LENGTH = 3,
-    SQL_ATTR_ASYNC_ENABLE = 4,
-    SQL_ATTR_ROW_BIND_TYPE = 5,
-    SQL_ATTR_CURSOR_TYPE = 6,
-    SQL_ATTR_CONCURRENCY = 7,
-    SQL_ATTR_KEYSET_SIZE = 8,
-    // Never renamed to SQL_ATTR_ROWSET_SIZE
-    SQL_ROWSET_SIZE = 9,
-    SQL_ATTR_SIMULATE_CURSOR = 10,
-    SQL_ATTR_RETRIEVE_DATA = 11,
-    SQL_ATTR_USE_BOOKMARKS = 12,
-    // Also has no SQL_ATTR version
-    SQL_GET_BOOKMARK = 13,
-    SQL_ATTR_ROW_NUMBER = 14,
-    SQL_ATTR_ENABLE_AUTO_IPD = 15,
-    SQL_ATTR_FETCH_BOOKMARK_PTR = 16,
-    SQL_ATTR_PARAM_BIND_OFFSET_PTR = 17,
-    SQL_ATTR_PARAM_BIND_TYPE = 18,
-    SQL_ATTR_PARAM_OPERATION_PTR = 19,
-    SQL_ATTR_PARAM_STATUS_PTR = 20,
-    SQL_ATTR_PARAMS_PROCESSED_PTR = 21,
-    SQL_ATTR_PARAMSET_SIZE = 22,
-    SQL_ATTR_ROW_BIND_OFFSET_PTR = 23,
-    SQL_ATTR_ROW_OPERATION_PTR = 24,
-    SQL_ATTR_ROW_STATUS_PTR = 25,
-    SQL_ATTR_ROWS_FETCHED_PTR = 26,
-    SQL_ATTR_ROW_ARRAY_SIZE = 27,
-    // there is no 28, apparently
-    SQL_ATTR_ASYNC_STMT_EVENT = 29,
-    SQL_ATTR_SAMPLE_SIZE = 30,
-    SQL_ATTR_DYNAMIC_COLUMNS = 31,
-    SQL_ATTR_TYPE_EXCEPTION_BEHAVIOR = 32,
-    SQL_ATTR_LENGTH_EXCEPTION_BEHAVIOR = 33,
-    SQL_ATTR_APP_ROW_DESC = 10010,
-    SQL_ATTR_APP_PARAM_DESC = 10011,
-    SQL_ATTR_IMP_ROW_DESC = 10012,
-    SQL_ATTR_IMP_PARAM_DESC = 10013,
-    SQL_ATTR_METADATA_ID = 10014,
-}
+// #[allow(non_camel_case_types)]
+// #[repr(i32)]
+// #[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
+// pub enum StatementAttribute {
+//     SQL_ATTR_CURSOR_SCROLLABLE = -1,
+//     SQL_ATTR_CURSOR_SENSITIVITY = -2,
+//     SQL_ATTR_QUERY_TIMEOUT = 0,
+//     SQL_ATTR_MAX_ROWS = 1,
+//     SQL_ATTR_NOSCAN = 2,
+//     SQL_ATTR_MAX_LENGTH = 3,
+//     SQL_ATTR_ASYNC_ENABLE = 4,
+//     SQL_ATTR_ROW_BIND_TYPE = 5,
+//     SQL_ATTR_CURSOR_TYPE = 6,
+//     SQL_ATTR_CONCURRENCY = 7,
+//     SQL_ATTR_KEYSET_SIZE = 8,
+//     // Never renamed to SQL_ATTR_ROWSET_SIZE
+//     SQL_ROWSET_SIZE = 9,
+//     SQL_ATTR_SIMULATE_CURSOR = 10,
+//     SQL_ATTR_RETRIEVE_DATA = 11,
+//     SQL_ATTR_USE_BOOKMARKS = 12,
+//     // Also has no SQL_ATTR version
+//     SQL_GET_BOOKMARK = 13,
+//     SQL_ATTR_ROW_NUMBER = 14,
+//     SQL_ATTR_ENABLE_AUTO_IPD = 15,
+//     SQL_ATTR_FETCH_BOOKMARK_PTR = 16,
+//     SQL_ATTR_PARAM_BIND_OFFSET_PTR = 17,
+//     SQL_ATTR_PARAM_BIND_TYPE = 18,
+//     SQL_ATTR_PARAM_OPERATION_PTR = 19,
+//     SQL_ATTR_PARAM_STATUS_PTR = 20,
+//     SQL_ATTR_PARAMS_PROCESSED_PTR = 21,
+//     SQL_ATTR_PARAMSET_SIZE = 22,
+//     SQL_ATTR_ROW_BIND_OFFSET_PTR = 23,
+//     SQL_ATTR_ROW_OPERATION_PTR = 24,
+//     SQL_ATTR_ROW_STATUS_PTR = 25,
+//     SQL_ATTR_ROWS_FETCHED_PTR = 26,
+//     SQL_ATTR_ROW_ARRAY_SIZE = 27,
+//     // there is no 28, apparently
+//     SQL_ATTR_ASYNC_STMT_EVENT = 29,
+//     SQL_ATTR_SAMPLE_SIZE = 30,
+//     SQL_ATTR_DYNAMIC_COLUMNS = 31,
+//     SQL_ATTR_TYPE_EXCEPTION_BEHAVIOR = 32,
+//     SQL_ATTR_LENGTH_EXCEPTION_BEHAVIOR = 33,
+//     SQL_ATTR_APP_ROW_DESC = 10010,
+//     SQL_ATTR_APP_PARAM_DESC = 10011,
+//     SQL_ATTR_IMP_ROW_DESC = 10012,
+//     SQL_ATTR_IMP_PARAM_DESC = 10013,
+//     SQL_ATTR_METADATA_ID = 10014,
+// }
 
 /// Extended C Types range 4000 and above. Range of -100 thru 200 is reserved by Driver Manager.
 /// `SQL_C_TYPES_EXTENDED`.
-pub const C_TYPES_EXTENDED: i16 = 0x04000;
+// pub const C_TYPES_EXTENDED: i16 = 0x04000;
 
-#[allow(non_camel_case_types)]
-#[repr(i16)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
-pub enum CDataType {
-    SQL_ARD_TYPE = -99,
-    SQL_APD_TYPE = -100,
-    SQL_C_UTINYINT = -28,
-    SQL_C_UBIGINT = -27,
-    SQL_C_STINYINT = -26,
-    SQL_C_SBIGINT = -25,
-    SQL_C_ULONG = -18,
-    SQL_C_USHORT = -17,
-    SQL_C_SLONG = -16,
-    SQL_C_SSHORT = -15,
-    SQL_C_GUID = -11,
-    SQL_C_WCHAR = -8,
-    SQL_C_BIT = -7,
-    SQL_C_BINARY = -2,
-    SQL_C_CHAR = 1,
-    SQL_C_NUMERIC = 2,
-    SQL_C_FLOAT = 7,
-    SQL_C_DOUBLE = 8,
-    SQL_C_DATE = 9,
-    SQL_C_TIME = 10,
-    SQL_C_TIMESTAMP = 11,
-    SQL_C_TYPE_DATE = 91,
-    SQL_C_TYPE_TIME = 92,
-    SQL_C_TYPE_TIMESTAMP = 93,
-    SQL_C_TYPE_TIME_WITH_TIMEZONE = 94,
-    SQL_C_TYPE_TIMESTAMP_WITH_TIMEZONE = 95,
-    SQL_C_DEFAULT = 99,
-    SQL_C_INTERVAL_YEAR = 101,
-    SQL_C_INTERVAL_MONTH = 102,
-    SQL_C_INTERVAL_DAY = 103,
-    SQL_C_INTERVAL_HOUR = 104,
-    SQL_C_INTERVAL_MINUTE = 105,
-    SQL_C_INTERVAL_SECOND = 106,
-    SQL_C_INTERVAL_YEAR_TO_MONTH = 107,
-    SQL_C_INTERVAL_DAY_TO_HOUR = 108,
-    SQL_C_INTERVAL_DAY_TO_MINUTE = 109,
-    SQL_C_INTERVAL_DAY_TO_SECOND = 110,
-    SQL_C_INTERVAL_HOUR_TO_MINUTE = 111,
-    SQL_C_INTERVAL_HOUR_TO_SECOND = 112,
-    SQL_C_INTERVAL_MINUTE_TO_SECOND = 113,
-    SQL_C_SS_TIME2 = C_TYPES_EXTENDED,
-    SQL_C_SS_TIMESTAMPOFFSET = C_TYPES_EXTENDED + 1,
-}
+// #[allow(non_camel_case_types)]
+// #[repr(i16)]
+// #[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
+// pub enum CDataType {
+//     SQL_ARD_TYPE = -99,
+//     SQL_APD_TYPE = -100,
+//     SQL_C_UTINYINT = -28,
+//     SQL_C_UBIGINT = -27,
+//     SQL_C_STINYINT = -26,
+//     SQL_C_SBIGINT = -25,
+//     SQL_C_ULONG = -18,
+//     SQL_C_USHORT = -17,
+//     SQL_C_SLONG = -16,
+//     SQL_C_SSHORT = -15,
+//     SQL_C_GUID = -11,
+//     SQL_C_WCHAR = -8,
+//     SQL_C_BIT = -7,
+//     SQL_C_BINARY = -2,
+//     SQL_C_CHAR = 1,
+//     SQL_C_NUMERIC = 2,
+//     SQL_C_FLOAT = 7,
+//     SQL_C_DOUBLE = 8,
+//     SQL_C_DATE = 9,
+//     SQL_C_TIME = 10,
+//     SQL_C_TIMESTAMP = 11,
+//     SQL_C_TYPE_DATE = 91,
+//     SQL_C_TYPE_TIME = 92,
+//     SQL_C_TYPE_TIMESTAMP = 93,
+//     SQL_C_TYPE_TIME_WITH_TIMEZONE = 94,
+//     SQL_C_TYPE_TIMESTAMP_WITH_TIMEZONE = 95,
+//     SQL_C_DEFAULT = 99,
+//     SQL_C_INTERVAL_YEAR = 101,
+//     SQL_C_INTERVAL_MONTH = 102,
+//     SQL_C_INTERVAL_DAY = 103,
+//     SQL_C_INTERVAL_HOUR = 104,
+//     SQL_C_INTERVAL_MINUTE = 105,
+//     SQL_C_INTERVAL_SECOND = 106,
+//     SQL_C_INTERVAL_YEAR_TO_MONTH = 107,
+//     SQL_C_INTERVAL_DAY_TO_HOUR = 108,
+//     SQL_C_INTERVAL_DAY_TO_MINUTE = 109,
+//     SQL_C_INTERVAL_DAY_TO_SECOND = 110,
+//     SQL_C_INTERVAL_HOUR_TO_MINUTE = 111,
+//     SQL_C_INTERVAL_HOUR_TO_SECOND = 112,
+//     SQL_C_INTERVAL_MINUTE_TO_SECOND = 113,
+//     SQL_C_SS_TIME2 = C_TYPES_EXTENDED,
+//     SQL_C_SS_TIMESTAMPOFFSET = C_TYPES_EXTENDED + 1,
+// }
 
-#[allow(non_camel_case_types)]
-#[repr(i16)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
-pub enum DiagType {
-    SQL_DIAG_RETURNCODE = 1,
-    SQL_DIAG_NUMBER = 2,
-    SQL_DIAG_ROW_COUNT = 3,
-    SQL_DIAG_SQLSTATE = 4,
-    SQL_DIAG_NATIVE = 5,
-    SQL_DIAG_MESSAGE_TEXT = 6,
-    SQL_DIAG_DYNAMIC_FUNCTION = 7,
-    SQL_DIAG_CLASS_ORIGIN = 8,
-    SQL_DIAG_SUBCLASS_ORIGIN = 9,
-    SQL_DIAG_CONNECTION_NAME = 10,
-    SQL_DIAG_SERVER_NAME = 11,
-    SQL_DIAG_DYNAMIC_FUNCTION_CODE = 12,
-    SQL_DIAG_CURSOR_ROW_COUNT = -1249,
-    SQL_DIAG_ROW_NUMBER = -1248,
-    SQL_DIAG_COLUMN_NUMBER = -1247,
-}
+// #[allow(non_camel_case_types)]
+// #[repr(i16)]
+// #[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
+// pub enum DiagType {
+//     SQL_DIAG_RETURNCODE = 1,
+//     SQL_DIAG_NUMBER = 2,
+//     SQL_DIAG_ROW_COUNT = 3,
+//     SQL_DIAG_SQLSTATE = 4,
+//     SQL_DIAG_NATIVE = 5,
+//     SQL_DIAG_MESSAGE_TEXT = 6,
+//     SQL_DIAG_DYNAMIC_FUNCTION = 7,
+//     SQL_DIAG_CLASS_ORIGIN = 8,
+//     SQL_DIAG_SUBCLASS_ORIGIN = 9,
+//     SQL_DIAG_CONNECTION_NAME = 10,
+//     SQL_DIAG_SERVER_NAME = 11,
+//     SQL_DIAG_DYNAMIC_FUNCTION_CODE = 12,
+//     SQL_DIAG_CURSOR_ROW_COUNT = -1249,
+//     SQL_DIAG_ROW_NUMBER = -1248,
+//     SQL_DIAG_COLUMN_NUMBER = -1247,
+// }
 
-#[allow(non_camel_case_types)]
-#[repr(i16)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
-pub enum ParamType {
-    SQL_PARAM_TYPE_UNKNOWN = 0,
-    SQL_PARAM_INPUT = 1,
-    SQL_PARAM_INPUT_OUTPUT = 2,
-    SQL_RESULT_COL = 3,
-    SQL_PARAM_OUTPUT = 4,
-    SQL_RETURN_VALUE = 5,
-    SQL_PARAM_INPUT_OUTPUT_STREAM = 8,
-    SQL_PARAM_OUTPUT_STREAM = 16,
-}
+// #[allow(non_camel_case_types)]
+// #[repr(i16)]
+// #[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
+// pub enum ParamType {
+//     SQL_PARAM_TYPE_UNKNOWN = 0,
+//     SQL_PARAM_INPUT = 1,
+//     SQL_PARAM_INPUT_OUTPUT = 2,
+//     SQL_RESULT_COL = 3,
+//     SQL_PARAM_OUTPUT = 4,
+//     SQL_RETURN_VALUE = 5,
+//     SQL_PARAM_INPUT_OUTPUT_STREAM = 8,
+//     SQL_PARAM_OUTPUT_STREAM = 16,
+// }
 
 #[allow(non_camel_case_types)]
 #[repr(i16)]
@@ -305,28 +305,28 @@ pub enum CompletionType {
     SQL_ROLLBACK = 1,
 }
 
-#[allow(non_camel_case_types)]
-#[repr(u16)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
-pub enum FetchOrientation {
-    SQL_FETCH_NEXT = 1,
-    SQL_FETCH_FIRST = 2,
-    SQL_FETCH_LAST = 3,
-    SQL_FETCH_PRIOR = 4,
-    SQL_FETCH_ABSOLUTE = 5,
-    SQL_FETCH_RELATIVE = 6,
-    SQL_FETCH_FIRST_USER = 31,
-    SQL_FETCH_FIRST_SYSTEM = 32,
-}
+// #[allow(non_camel_case_types)]
+// #[repr(u16)]
+// #[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
+// pub enum FetchOrientation {
+//     SQL_FETCH_NEXT = 1,
+//     SQL_FETCH_FIRST = 2,
+//     SQL_FETCH_LAST = 3,
+//     SQL_FETCH_PRIOR = 4,
+//     SQL_FETCH_ABSOLUTE = 5,
+//     SQL_FETCH_RELATIVE = 6,
+//     SQL_FETCH_FIRST_USER = 31,
+//     SQL_FETCH_FIRST_SYSTEM = 32,
+// }
 
-#[allow(non_camel_case_types)]
-#[repr(i16)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
-pub enum Nullability {
-    SQL_NO_NULLS = 0,
-    SQL_NULLABLE = 1,
-    SQL_NULLABLE_UNKNOWN = 2,
-}
+// #[allow(non_camel_case_types)]
+// #[repr(i16)]
+// #[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
+// pub enum Nullability {
+//     SQL_NO_NULLS = 0,
+//     SQL_NULLABLE = 1,
+//     SQL_NULLABLE_UNKNOWN = 2,
+// }
 
 pub const SQL_ROW_NUMBER_UNKNOWN: isize = -2;
 

@@ -3,7 +3,7 @@ use crate::{
     handles::definitions::{MongoHandle, Statement, StatementState},
     map, SQLGetStmtAttrW, SQLSetStmtAttrW,
 };
-use definitions::{HStmt, Integer, Pointer, SqlReturn, ULen, USmallInt};
+use definitions::{HStmt, Integer, Pointer, SqlReturn, ULen, USmallInt, StatementAttribute};
 use std::{collections::BTreeMap, mem::size_of};
 
 fn get_set_stmt_attr(

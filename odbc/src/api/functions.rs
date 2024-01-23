@@ -19,8 +19,8 @@ use constants::{
 use cstr::{input_text_to_string_w, Charset, WideChar};
 
 use definitions::{
-    Desc, DriverConnectOption, HDbc, HDesc, HEnv, HStmt, HWnd, Handle, HandleType, InfoType, Integer, Len,
-    Nullability, Pointer, RetCode, SmallInt, SqlDataType, SqlReturn, ULen, USmallInt,
+    CDataType, DiagType, AttrConnectionPooling, AttrCpMatch, AttrOdbcVersion, StatementAttribute, Desc, DriverConnectOption, HDbc, HDesc, HEnv, HStmt, HWnd, Handle, HandleType, InfoType,
+    Integer, Len, Nullability, Pointer, RetCode, SmallInt, SqlDataType, SqlReturn, ULen, USmallInt,
 };
 use function_name::named;
 use log::{debug, error, info};
@@ -1786,17 +1786,17 @@ unsafe fn sql_get_env_attrw_helper(
         ptr_safe_write(string_length, size_of::<Integer>() as Integer);
         match attribute {
             EnvironmentAttribute::SQL_ATTR_ODBC_VERSION => {
-                *(value_ptr as *mut OdbcVersion) = env.attributes.read().unwrap().odbc_ver;
+                *(value_ptr as *mut AttrOdbcVersion) = env.attributes.read().unwrap().odbc_ver;
             }
             EnvironmentAttribute::SQL_ATTR_OUTPUT_NTS => {
                 *(value_ptr as *mut SqlBool) = env.attributes.read().unwrap().output_nts;
             }
             EnvironmentAttribute::SQL_ATTR_CONNECTION_POOLING => {
-                *(value_ptr as *mut ConnectionPooling) =
+                *(value_ptr as *mut AttrConnectionPooling) =
                     env.attributes.read().unwrap().connection_pooling;
             }
             EnvironmentAttribute::SQL_ATTR_CP_MATCH => {
-                *(value_ptr as *mut CpMatch) = env.attributes.read().unwrap().cp_match;
+                *(value_ptr as *mut AttrCpMatch) = env.attributes.read().unwrap().cp_match;
             }
             EnvironmentAttribute::SQL_ATTR_DRIVER_UNICODE_TYPE => {
                 *(value_ptr as *mut Charset) = env.attributes.read().unwrap().driver_unicode_type;
@@ -3131,7 +3131,7 @@ unsafe fn sql_set_env_attrw_helper(
         }
         EnvironmentAttribute::SQL_ATTR_CONNECTION_POOLING => {
             match FromPrimitive::from_i32(value_ptr as i32) {
-                Some(ConnectionPooling::Off) => SqlReturn::SUCCESS,
+                Some(AttrConnectionPooling::Off) => SqlReturn::SUCCESS,
                 _ => {
                     env_handle.add_diag_info(ODBCError::OptionValueChanged(
                         "SQL_ATTR_CONNECTION_POOLING",
@@ -3143,7 +3143,7 @@ unsafe fn sql_set_env_attrw_helper(
         }
         EnvironmentAttribute::SQL_ATTR_CP_MATCH => {
             match FromPrimitive::from_i32(value_ptr as i32) {
-                Some(CpMatch::Strict) => SqlReturn::SUCCESS,
+                Some(AttrCpMatch::Strict) => SqlReturn::SUCCESS,
                 _ => {
                     env_handle.add_diag_info(ODBCError::OptionValueChanged(
                         "SQL_ATTR_CP_MATCH",

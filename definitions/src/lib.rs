@@ -9,7 +9,7 @@
 //! in the cargo.toml
 
 pub use self::{
-    attributes::*, bulk_operation::*, c_data_type::*, desc::*, fetch_orientation::*, functions::*,
+    attributes::*, bulk_operation::*, c_data_type::*, desc::*, diag_type::*, fetch_orientation::*, functions::*,
     indicator::*, info_type::*, interval::*, nullability::*, param_type::*, sql_data_type::*,
     sqlreturn::*,
 };
@@ -20,6 +20,7 @@ mod attributes;
 mod bulk_operation;
 mod c_data_type;
 mod desc;
+mod diag_type;
 mod fetch_orientation;
 mod functions;
 mod indicator;
