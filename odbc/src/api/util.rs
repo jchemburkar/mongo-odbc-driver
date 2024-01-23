@@ -1,5 +1,4 @@
-use crate::definitions::{ConnectionAttribute};
-use definitions::{AttrOdbcVersion, StatementAttribute, SqlDataType};
+use definitions::{AttrOdbcVersion, ConnectionAttribute, SqlDataType, StatementAttribute};
 
 pub(crate) fn connection_attribute_to_string(attr: ConnectionAttribute) -> String {
     match attr {

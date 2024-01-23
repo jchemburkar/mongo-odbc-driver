@@ -421,7 +421,7 @@ mod integration {
                 SqlReturn::SUCCESS,
                 SQLSetConnectAttrW(
                     conn_handle,
-                    ConnectionAttribute::CurrentCatalog,
+                    ConnectionAttribute::SQL_ATTR_CURRENT_CATALOG,
                     current_db.0 as *mut _,
                     current_db.1.len() as i32
                 )

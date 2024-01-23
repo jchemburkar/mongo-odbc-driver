@@ -1,6 +1,9 @@
 use crate::api::{definitions::*, errors::ODBCError};
 use cstr::{Charset, WideChar};
-use definitions::{AttrOdbcVersion, AttrConnectionPooling, AttrCpMatch, HDbc, HDesc, HEnv, HStmt, Handle, Len, Pointer, ULen, USmallInt};
+use definitions::{
+    AttrConnectionPooling, AttrCpMatch, AttrOdbcVersion, HDbc, HDesc, HEnv, HStmt, Handle, Len,
+    Pointer, SqlBool, ULen, USmallInt,
+};
 use mongo_odbc_core::TypeMode;
 use std::{
     borrow::BorrowMut,

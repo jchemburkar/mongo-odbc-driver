@@ -1,7 +1,4 @@
-use crate::{
-   handles::definitions::*, has_odbc_3_behavior, SQLAllocHandle,
-    SQLFreeHandle,
-};
+use crate::{handles::definitions::*, has_odbc_3_behavior, SQLAllocHandle, SQLFreeHandle};
 use definitions::{AttrOdbcVersion, Handle, HandleType, SqlReturn};
 
 #[test]
@@ -392,13 +389,34 @@ fn test_odbc_ver() {
 
     // assert correct types for all handles
     assert_eq!(odbc_2_env_handle.get_odbc_version(), AttrOdbcVersion::Odbc2);
-    assert_eq!(odbc_2_conn_handle.get_odbc_version(), AttrOdbcVersion::Odbc2);
-    assert_eq!(odbc_2_desc_handle.get_odbc_version(), AttrOdbcVersion::Odbc2);
-    assert_eq!(odbc_2_stmt_handle.get_odbc_version(), AttrOdbcVersion::Odbc2);
-    assert_eq!(odbc_3_env_handle.get_odbc_version(), AttrOdbcVersion::Odbc3_80);
-    assert_eq!(odbc_3_conn_handle.get_odbc_version(), AttrOdbcVersion::Odbc3_80);
-    assert_eq!(odbc_3_desc_handle.get_odbc_version(), AttrOdbcVersion::Odbc3_80);
-    assert_eq!(odbc_3_stmt_handle.get_odbc_version(), AttrOdbcVersion::Odbc3_80);
+    assert_eq!(
+        odbc_2_conn_handle.get_odbc_version(),
+        AttrOdbcVersion::Odbc2
+    );
+    assert_eq!(
+        odbc_2_desc_handle.get_odbc_version(),
+        AttrOdbcVersion::Odbc2
+    );
+    assert_eq!(
+        odbc_2_stmt_handle.get_odbc_version(),
+        AttrOdbcVersion::Odbc2
+    );
+    assert_eq!(
+        odbc_3_env_handle.get_odbc_version(),
+        AttrOdbcVersion::Odbc3_80
+    );
+    assert_eq!(
+        odbc_3_conn_handle.get_odbc_version(),
+        AttrOdbcVersion::Odbc3_80
+    );
+    assert_eq!(
+        odbc_3_desc_handle.get_odbc_version(),
+        AttrOdbcVersion::Odbc3_80
+    );
+    assert_eq!(
+        odbc_3_stmt_handle.get_odbc_version(),
+        AttrOdbcVersion::Odbc3_80
+    );
 }
 
 #[test]

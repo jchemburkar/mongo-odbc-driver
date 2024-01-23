@@ -1,13 +1,9 @@
-use crate::{
-    api::{
-        data::i16_len,
-        definitions::{SQL_ROW_NUMBER_UNKNOWN},
-    },
-    errors::ODBCError,
-};
+use crate::{api::data::i16_len, errors::ODBCError};
 use cstr::WideChar;
 use definitions::Pointer;
-use definitions::{DiagType, AttrOdbcVersion, Integer, SmallInt, SqlReturn};
+use definitions::{
+    AttrOdbcVersion, DiagType, Integer, SmallInt, SqlReturn, SQL_ROW_NUMBER_UNKNOWN,
+};
 use std::ptr::copy_nonoverlapping;
 
 ///

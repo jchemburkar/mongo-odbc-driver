@@ -606,8 +606,8 @@ fn indicator_missing(mq: MongoQuery) {
 
 fn sql_get_wstring_data(mq: MongoQuery) {
     use crate::api::functions::SQLGetData;
-    use definitions::CDataType;
     use cstr::input_text_to_string_w;
+    use definitions::CDataType;
 
     let env = Box::into_raw(Box::new(MongoHandle::Env(Env::with_state(
         EnvState::ConnectionAllocated,
@@ -704,8 +704,8 @@ fn sql_get_wstring_data(mq: MongoQuery) {
 
 fn sql_get_wstring_data_by_pieces(mq: MongoQuery) {
     use crate::api::functions::SQLGetData;
-    use definitions::CDataType;
     use cstr::input_text_to_string_w;
+    use definitions::CDataType;
     use std::mem::size_of;
 
     let env = Box::into_raw(Box::new(MongoHandle::Env(Env::with_state(
@@ -870,8 +870,8 @@ fn sql_get_guid_data(mq: MongoQuery) {
 
 fn sql_get_string_data_by_pieces(mq: MongoQuery) {
     use crate::api::functions::SQLGetData;
-    use definitions::CDataType;
     use cstr::input_text_to_string_a;
+    use definitions::CDataType;
 
     let env = Box::into_raw(Box::new(MongoHandle::Env(Env::with_state(
         EnvState::ConnectionAllocated,
@@ -1102,8 +1102,8 @@ fn sql_get_binary_data_by_pieces(mq: MongoQuery) {
 
 fn sql_get_string_data(mq: MongoQuery) {
     use crate::api::functions::SQLGetData;
-    use definitions::CDataType;
     use cstr::input_text_to_string_a;
+    use definitions::CDataType;
 
     let env = Box::into_raw(Box::new(MongoHandle::Env(Env::with_state(
         EnvState::ConnectionAllocated,

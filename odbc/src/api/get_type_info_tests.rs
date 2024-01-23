@@ -1,7 +1,4 @@
-use crate::{
-    handles::definitions::*,
-    SQLFetch, SQLGetDiagFieldW, SQLGetTypeInfoW,
-};
+use crate::{handles::definitions::*, SQLFetch, SQLGetDiagFieldW, SQLGetTypeInfoW};
 use bson::Bson;
 use definitions::{AttrOdbcVersion, DiagType, HandleType::Stmt, SqlDataType, SqlReturn};
 
