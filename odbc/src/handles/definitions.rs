@@ -1,8 +1,9 @@
-use crate::api::{definitions::*, errors::ODBCError};
+use crate::api::errors::ODBCError;
 use cstr::{Charset, WideChar};
 use definitions::{
-    AttrConnectionPooling, AttrCpMatch, AttrOdbcVersion, HDbc, HDesc, HEnv, HStmt, Handle, Len,
-    Pointer, SqlBool, ULen, USmallInt,
+    AsyncEnable, AttrConnectionPooling, AttrCpMatch, AttrOdbcVersion, BindType, Concurrency,
+    CursorScrollable, CursorSensitivity, CursorType, HDbc, HDesc, HEnv, HStmt, Handle, Len, NoScan,
+    Pointer, RetrieveData, SimulateCursor, SqlBool, ULen, USmallInt, UseBookmarks,
 };
 use mongo_odbc_core::TypeMode;
 use std::{

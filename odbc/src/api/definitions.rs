@@ -1,4 +1,4 @@
-use num_derive::FromPrimitive;
+// use num_derive::FromPrimitive;
 
 // #[derive(Copy, Clone, Debug, PartialEq, Eq, FromPrimitive)]
 // pub enum SqlBool {
@@ -30,86 +30,86 @@ use num_derive::FromPrimitive;
 
 // Statement attributes
 
-#[derive(Clone, Copy, Debug, FromPrimitive)]
-pub enum CursorScrollable {
-    NonScrollable = 0,
-    Scrollable,
-}
+// #[derive(Clone, Copy, Debug, FromPrimitive)]
+// pub enum CursorScrollable {
+//     NonScrollable = 0,
+//     Scrollable,
+// }
 
-#[derive(Clone, Copy, Debug, FromPrimitive)]
-pub enum CursorSensitivity {
-    Unspecified = 0,
-    Insensitive,
-    Sensitive,
-}
+// #[derive(Clone, Copy, Debug, FromPrimitive)]
+// pub enum CursorSensitivity {
+//     Unspecified = 0,
+//     Insensitive,
+//     Sensitive,
+// }
 
-#[derive(Clone, Copy, Debug)]
-pub enum AsyncEnable {
-    Off = 0,
-    On,
-}
+// #[derive(Clone, Copy, Debug)]
+// pub enum AsyncEnable {
+//     Off = 0,
+//     On,
+// }
 
-#[derive(Clone, Copy, Debug, FromPrimitive)]
-pub enum Concurrency {
-    ReadOnly = 1,
-    Lock = 2,
-    RowVer = 4,
-    Values = 8,
-}
+// #[derive(Clone, Copy, Debug, FromPrimitive)]
+// pub enum Concurrency {
+//     ReadOnly = 1,
+//     Lock = 2,
+//     RowVer = 4,
+//     Values = 8,
+// }
 
-#[derive(Clone, Copy, Debug, FromPrimitive)]
-pub enum CursorType {
-    ForwardOnly = 0,
-    KeysetDriven = -1,
-    Dynamic = -2,
-    Static = -3,
-}
+// #[derive(Clone, Copy, Debug, FromPrimitive)]
+// pub enum CursorType {
+//     ForwardOnly = 0,
+//     KeysetDriven = -1,
+//     Dynamic = -2,
+//     Static = -3,
+// }
 
-#[derive(Clone, Copy, Debug, FromPrimitive)]
-pub enum NoScan {
-    Off = 0,
-    On,
-}
+// #[derive(Clone, Copy, Debug, FromPrimitive)]
+// pub enum NoScan {
+//     Off = 0,
+//     On,
+// }
 
-#[derive(Clone, Copy, Debug)]
-pub enum BindType {
-    BindByColumn = 0,
-}
+// #[derive(Clone, Copy, Debug)]
+// pub enum BindType {
+//     BindByColumn = 0,
+// }
 
-#[derive(Clone, Copy, Debug)]
-pub enum ParamOperationPtr {}
+// #[derive(Clone, Copy, Debug)]
+// pub enum ParamOperationPtr {}
 
-#[derive(Clone, Copy, Debug)]
-pub enum ParamStatusPtr {}
+// #[derive(Clone, Copy, Debug)]
+// pub enum ParamStatusPtr {}
 
-#[derive(Clone, Copy, Debug)]
-pub enum ParamsProcessedPtr {}
+// #[derive(Clone, Copy, Debug)]
+// pub enum ParamsProcessedPtr {}
 
-#[derive(Clone, Copy, Debug)]
-pub enum ParamsetSize {}
+// #[derive(Clone, Copy, Debug)]
+// pub enum ParamsetSize {}
 
-#[derive(Clone, Copy, Debug, FromPrimitive)]
-pub enum RetrieveData {
-    Off = 0,
-    On,
-}
+// #[derive(Clone, Copy, Debug, FromPrimitive)]
+// pub enum RetrieveData {
+//     Off = 0,
+//     On,
+// }
 
-#[derive(Clone, Copy, Debug)]
-pub enum RowOperationPtr {}
+// #[derive(Clone, Copy, Debug)]
+// pub enum RowOperationPtr {}
 
-#[derive(Clone, Copy, Debug)]
-pub enum SimulateCursor {
-    NonUnique = 0,
-}
+// #[derive(Clone, Copy, Debug)]
+// pub enum SimulateCursor {
+//     NonUnique = 0,
+// }
 
-#[derive(Clone, Copy, Debug, FromPrimitive)]
-pub enum UseBookmarks {
-    Off = 0,
-    Variable = 2,
-}
+// #[derive(Clone, Copy, Debug, FromPrimitive)]
+// pub enum UseBookmarks {
+//     Off = 0,
+//     Variable = 2,
+// }
 
-#[derive(Clone, Copy, Debug)]
-pub enum AsyncStmtEvent {}
+// #[derive(Clone, Copy, Debug)]
+// pub enum AsyncStmtEvent {}
 
 // #[allow(non_camel_case_types)]
 // #[repr(i32)]
@@ -140,16 +140,16 @@ pub enum AsyncStmtEvent {}
 //     SQL_ATTR_METADATA_ID = 10014,
 // }
 
-#[allow(non_camel_case_types)]
-#[repr(i32)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
-pub enum EnvironmentAttribute {
-    SQL_ATTR_ODBC_VERSION = 200,
-    SQL_ATTR_CONNECTION_POOLING = 201,
-    SQL_ATTR_CP_MATCH = 202,
-    SQL_ATTR_OUTPUT_NTS = 10001,
-    SQL_ATTR_DRIVER_UNICODE_TYPE = 1065,
-}
+// #[allow(non_camel_case_types)]
+// #[repr(i32)]
+// #[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
+// pub enum EnvironmentAttribute {
+//     SQL_ATTR_ODBC_VERSION = 200,
+//     SQL_ATTR_CONNECTION_POOLING = 201,
+//     SQL_ATTR_CP_MATCH = 202,
+//     SQL_ATTR_OUTPUT_NTS = 10001,
+//     SQL_ATTR_DRIVER_UNICODE_TYPE = 1065,
+// }
 
 // #[allow(non_camel_case_types)]
 // #[repr(i32)]
@@ -200,8 +200,8 @@ pub enum EnvironmentAttribute {
 //     SQL_ATTR_METADATA_ID = 10014,
 // }
 
-/// Extended C Types range 4000 and above. Range of -100 thru 200 is reserved by Driver Manager.
-/// `SQL_C_TYPES_EXTENDED`.
+// Extended C Types range 4000 and above. Range of -100 thru 200 is reserved by Driver Manager.
+// `SQL_C_TYPES_EXTENDED`.
 // pub const C_TYPES_EXTENDED: i16 = 0x04000;
 
 // #[allow(non_camel_case_types)]
@@ -287,23 +287,23 @@ pub enum EnvironmentAttribute {
 //     SQL_PARAM_OUTPUT_STREAM = 16,
 // }
 
-#[allow(non_camel_case_types)]
-#[repr(i16)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
-pub enum BulkOperation {
-    SQL_ADD = 4,
-    SQL_UPDATE_BY_BOOKMARK = 5,
-    SQL_DELETE_BY_BOOKMARK = 6,
-    SQL_FETCH_BY_BOOKMARK = 7,
-}
+// #[allow(non_camel_case_types)]
+// #[repr(i16)]
+// #[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
+// pub enum BulkOperation {
+//     SQL_ADD = 4,
+//     SQL_UPDATE_BY_BOOKMARK = 5,
+//     SQL_DELETE_BY_BOOKMARK = 6,
+//     SQL_FETCH_BY_BOOKMARK = 7,
+// }
 
-#[allow(non_camel_case_types)]
-#[repr(i16)]
-#[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
-pub enum CompletionType {
-    SQL_COMMIT = 0,
-    SQL_ROLLBACK = 1,
-}
+// #[allow(non_camel_case_types)]
+// #[repr(i16)]
+// #[derive(Debug, PartialEq, Eq, Clone, Copy, FromPrimitive)]
+// pub enum CompletionType {
+//     SQL_COMMIT = 0,
+//     SQL_ROLLBACK = 1,
+// }
 
 // #[allow(non_camel_case_types)]
 // #[repr(u16)]

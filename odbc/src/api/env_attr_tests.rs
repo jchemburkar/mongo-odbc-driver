@@ -5,8 +5,8 @@ use crate::{
 };
 use crate::{map, SQLSetEnvAttr};
 use definitions::{
-    AttrConnectionPooling, AttrCpMatch, AttrOdbcVersion, HEnv, HandleType, Integer, Pointer,
-    SqlBool, SqlReturn,
+    AttrConnectionPooling, AttrCpMatch, AttrOdbcVersion, EnvironmentAttribute, HEnv, HandleType,
+    Integer, Pointer, SqlBool, SqlReturn,
 };
 use std::{collections::BTreeMap, mem::size_of};
 
