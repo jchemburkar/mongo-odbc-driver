@@ -29,9 +29,10 @@ logger = { path = "../logger" }
 log = "0.4.17"
 
 [dependencies.mongodb]
-version = "2.7"
+git = "https://github.com/jchemburkar/mongo-rust-driver"
 default-features = false
 features = ["tokio-sync"]
+branch="ssis-tmp"
 
 [dependencies.bson]
 version = "2.0.1"
