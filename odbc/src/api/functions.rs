@@ -1029,11 +1029,12 @@ fn sql_driver_connect(conn: &Connection, odbc_uri_string: &str) -> Result<MongoC
         .remove(&["driver", "dsn"])
         .ok_or(ODBCError::MissingDriverOrDSNProperty)?;
 
-    if let Some(log_level) = odbc_uri.remove(&["loglevel"]) {
-        // The connection log level takes precedence over the driver log level
-        // Update the logger configuration. This will affect all logging from the application.
-        Logger::set_log_level(log_level);
-    }
+    // if let Some(log_level) = odbc_uri.remove(&["loglevel"]) {
+    //     // The connection log level takes precedence over the driver log level
+    //     // Update the logger configuration. This will affect all logging from the application.
+    //     Logger::set_log_level(log_level);
+    // }
+    Logger::set_log_level("debug".to_string());
 
     if let Some(simple) = odbc_uri.remove(&["simple_types_only"]) {
         if simple.eq("1") {
@@ -2589,6 +2590,22 @@ macro_rules! sql_get_info_helper {
                         string_length_ptr,
                     )
                 }
+                InfoType::SQL_QUOTED_IDENTIFIER_CASE => {
+                    i16_len::set_output_fixed_data(
+                        &3,
+                        info_value_ptr,
+                        string_length_ptr,
+                    )
+                }
+                InfoType::SQL_MAX_SCHEMA_NAME_LEN
+                | InfoType::SQL_MAX_CATALOG_NAME_LEN
+                | InfoType::SQL_MAX_TABLE_NAME_LEN => {
+                    i16_len::set_output_fixed_data(
+                        &0,
+                        info_value_ptr,
+                        string_length_ptr,
+                    )
+                }
                 _ => {
                     err = Some(ODBCError::UnsupportedInfoTypeRetrieval(
                         info_type.to_string(),
@@ -3491,6 +3508,12 @@ unsafe fn sql_set_stmt_attrw_helper(
     attribute: StatementAttribute,
     value_ptr: Pointer,
 ) -> SqlReturn {
+    trace_odbc!(
+        debug,
+        stmt_handle,
+        format!("stmt attribute is {attribute:?}, value is {:?}", value_ptr as i32),
+        "stmt attr w!"
+    );
     let stmt = must_be_valid!(stmt_handle.as_statement());
     match attribute {
         StatementAttribute::SQL_ATTR_APP_ROW_DESC => {
