@@ -65,6 +65,7 @@ impl MongoConnection {
     pub fn shutdown(self) -> Result<()> {
         self.runtime
             .block_on(async { self.client.shutdown().await });
+        drop(self.runtime);
         Ok(())
     }
 

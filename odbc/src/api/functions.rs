@@ -1022,11 +1022,12 @@ fn sql_driver_connect(conn: &Connection, odbc_uri_string: &str) -> Result<MongoC
         .remove(&["driver", "dsn"])
         .ok_or(ODBCError::MissingDriverOrDSNProperty)?;
 
-    if let Some(log_level) = odbc_uri.remove(&["loglevel"]) {
-        // The connection log level takes precedence over the driver log level
-        // Update the logger configuration. This will affect all logging from the application.
-        Logger::set_log_level(log_level);
-    }
+    // if let Some(log_level) = odbc_uri.remove(&["loglevel"]) {
+    //     // The connection log level takes precedence over the driver log level
+    //     // Update the logger configuration. This will affect all logging from the application.
+    //     Logger::set_log_level(log_level);
+    // }
+    Logger::set_log_level("debug".to_string());
 
     if let Some(simple) = odbc_uri.remove(&["simple_types_only"]) {
         if simple.eq("1") {
