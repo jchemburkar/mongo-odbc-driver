@@ -40,10 +40,9 @@ impl MongoConnection {
         login_timeout: Option<u32>,
         type_mode: TypeMode,
     ) -> Result<Self> {
-        let runtime = tokio::runtime::Builder::new_multi_thread()
-            .enable_all()
-            .build()
-            .unwrap();
+        let runtime = tokio::runtime::Runtime::new().unwrap();
+
+        let _ = std::panic::catch_unwind(|| { console_subscriber::init() });
         user_options.client_options.connect_timeout =
             login_timeout.map(|to| Duration::new(to as u64, 0));
         let client = Client::with_options(user_options.client_options)
@@ -63,9 +62,14 @@ impl MongoConnection {
     }
 
     pub fn shutdown(self) -> Result<()> {
+        use std::{thread, time};
+        thread::sleep(time::Duration::from_secs(1));
         self.runtime
             .block_on(async { self.client.shutdown().await });
-        drop(self.runtime);
+        self.runtime.shutdown_timeout(std::time::Duration::from_millis(10));
+        // drop(self.runtime);
+        // use std::{thread, time};
+        thread::sleep(time::Duration::from_secs(1));
         Ok(())
     }
 

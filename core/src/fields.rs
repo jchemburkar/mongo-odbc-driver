@@ -490,7 +490,7 @@ impl MongoFields {
     ) -> Self {
         let dbs = db_name.map_or_else(
             || {
-                mongo_connection.runtime.handle().block_on(async {
+                mongo_connection.runtime.block_on(async {
                     mongo_connection
                         .client
                         .list_database_names(

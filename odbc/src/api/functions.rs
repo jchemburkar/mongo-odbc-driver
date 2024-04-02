@@ -1005,10 +1005,16 @@ pub unsafe extern "C" fn SQLDisconnect(connection_handle: HDbc) -> SqlReturn {
         || {
             let conn_handle = MongoHandleRef::from(connection_handle);
             let conn = must_be_valid!((*conn_handle).as_connection());
+            
             // set the mongo_connection to None. This will cause the previous mongo_connection
             // to drop and disconnect.
             let conn = conn.mongo_connection.write().unwrap().take();
-            let _ = conn.unwrap().shutdown();
+            trace_odbc!(
+                info,
+                MongoHandleRef::from(connection_handle),
+                format!("shutdown {:?}", conn.unwrap().shutdown()),
+                function_name!()
+            );
             SqlReturn::SUCCESS
         },
         connection_handle
