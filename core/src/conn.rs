@@ -41,7 +41,7 @@ impl MongoConnection {
         type_mode: TypeMode,
     ) -> Result<Self> {
         let runtime = tokio::runtime::Runtime::new().unwrap();
-
+        std::panic::set_hook(Box::new(|_info| {}));
         let _ = std::panic::catch_unwind(|| { console_subscriber::init() });
         user_options.client_options.connect_timeout =
             login_timeout.map(|to| Duration::new(to as u64, 0));
