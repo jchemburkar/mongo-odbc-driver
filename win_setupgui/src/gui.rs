@@ -145,6 +145,7 @@ impl ConfigGui {
             user: self.user_input.text().as_str(),
             server: "",
             driver_name: self.driver_name.text().as_str(),
+            driver_name: self.simple_types_only.text().as_str(),
         }) {
             Err(e) => {
                 nwg::modal_error_message(&self.window, "Error", &e.to_string());

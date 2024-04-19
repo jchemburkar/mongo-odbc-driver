@@ -13,6 +13,7 @@ const SERVER: &str = "server";
 const UID: &str = "uid";
 const URI: &str = "uri";
 const USER: &str = "user";
+const SIMPLE_TYPES_ONLY: &str = "simple_types_only";
 // SQL-1281
 // const LOGPATH: &str = "LOGPATH";
 
@@ -42,6 +43,7 @@ pub struct DsnArgs<S: Into<String> + Copy> {
     pub user: S,
     pub server: S,
     pub driver_name: S,
+    pub simple_types_only: S,
 }
 
 #[derive(Debug, Default)]
@@ -53,6 +55,7 @@ pub struct Dsn {
     pub user: String,
     pub server: String,
     pub driver_name: String,
+    pub simple_types_only: String,
 }
 
 impl Dsn {
@@ -66,6 +69,7 @@ impl Dsn {
             Dsn::check_value_length(&args.user.into()),
             Dsn::check_value_length(&args.server.into()),
             Dsn::check_value_length(&args.driver_name.into()),
+            Dsn::check_value_length(&args.simple_types_only.into()),
         ];
         if validation.iter().all(|&b| b) {
             Ok(Self {
@@ -76,6 +80,7 @@ impl Dsn {
                 user: args.user.into(),
                 server: args.server.into(),
                 driver_name: args.driver_name.into(),
+                simple_types_only: args.simple_types_only.into(),
             })
         } else if !validation[1] {
             Err(DsnError::Dsn(args.dsn.into()))
@@ -204,6 +209,7 @@ impl Dsn {
             URI => self.uri = value.to_string(),
             USER => self.user = value.to_string(),
             UID => self.user = value.to_string(),
+            SIMPLE_TYPES_ONLY => self.simple_types_only = value.to_string(),
             // SQL-1281
             // LOGPATH => self.logpath = value.to_string(),
             _ => {}
@@ -273,6 +279,7 @@ mod test {
             user: "test",
             server: "test",
             driver_name: "test",
+            simple_types_only: "0",
         });
         assert!(dsn_opts.is_err());
     }
@@ -287,6 +294,7 @@ mod test {
             user: "test",
             server: "test",
             driver_name: "test",
+            simple_types_only: "0",
         });
         assert!(dsn_opts.is_err());
     }
@@ -301,6 +309,7 @@ mod test {
             user: "test",
             server: "test",
             driver_name: "test",
+            simple_types_only: "0",
         });
         assert!(dsn_opts.is_err());
     }
@@ -315,6 +324,7 @@ mod test {
             user: "test",
             server: "t".repeat(MAX_VALUE_LENGTH + 1).as_str(),
             driver_name: "test",
+            simple_types_only: "0",
         });
         assert!(dsn_opts.is_err());
     }
@@ -329,6 +339,7 @@ mod test {
             server: "test",
             user: "t".repeat(MAX_VALUE_LENGTH + 1).as_str(),
             driver_name: "test",
+            simple_types_only: "0",
         });
         assert!(dsn_opts.is_err());
     }
@@ -343,6 +354,7 @@ mod test {
             server: "test",
             user: "test",
             driver_name: "test",
+            simple_types_only: "0",
         });
         assert!(dsn_opts.is_ok());
     }
@@ -358,5 +370,7 @@ mod test {
         assert_eq!(dsn_opts.user, "user1");
         dsn_opts.set_field("user", "user2");
         assert_eq!(dsn_opts.user, "user2");
+        dsn_opts.set_field("simple_types_only", "1");
+        assert_eq!(dsn_opts.simple_types_only, "1");
     }
 }
