@@ -112,6 +112,8 @@ pub struct MongoConnection {
 
     /// client cluster type. Valid types are AtlasDataFederation and Enterprise
     pub cluster_type: MongoClusterType,
+
+    pub databases: Vec<String>,
 }
 
 impl MongoConnection {
@@ -265,6 +267,7 @@ impl MongoConnection {
             uuid_repr,
             runtime,
             cluster_type: type_of_cluster,
+            databases: vec![],
         };
 
         // Verify that the connection is working and the user has access to the default DB

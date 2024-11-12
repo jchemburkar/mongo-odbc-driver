@@ -206,7 +206,7 @@ impl MongoDatabases {
     // The query timeout comes from the statement attribute SQL_ATTR_QUERY_TIMEOUT. If there is a
     // timeout, the query must finish before the timeout or an error is returned.
     pub fn list_all_catalogs(
-        mongo_connection: &MongoConnection,
+        mongo_connection: &mut MongoConnection,
         _query_timeout: Option<i32>,
     ) -> Self {
         let _guard = mongo_connection.runtime.enter();
@@ -224,6 +224,8 @@ impl MongoDatabases {
             .filter(|&db_name| !DISALLOWED_DB_NAMES.contains(&db_name.as_str()))
             .map(|s| s.to_string())
             .collect();
+
+        mongo_connection.databases = database_names.clone();
 
         MongoDatabases {
             database_names,

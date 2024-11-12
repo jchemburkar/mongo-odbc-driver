@@ -41,16 +41,18 @@ pub struct MongoQuery {
 }
 
 impl MongoQuery {
-    fn get_sql_query_namespaces(sql_query: &str, db: &String) -> Result<BTreeSet<Namespace>> {
-        let command = GetNamespaces::new(sql_query.to_string(), db.to_string());
-
-        let command_response = libmongosqltranslate_run_command(command)?;
-
-        if let CommandResponse::GetNamespaces(response) = command_response {
-            Ok(response.namespaces)
-        } else {
-            unreachable!()
-        }
+    fn get_sql_query_namespaces(sql_query: &str, databases: Vec<String>) -> Result<BTreeSet<Namespace>> {
+        let mut namespaces = BTreeSet::new();
+        databases.iter().for_each(|db| {
+            let command = GetNamespaces::new(sql_query.to_string(), db.to_string());
+            let command_response = libmongosqltranslate_run_command(command).unwrap();
+            if let CommandResponse::GetNamespaces(response) = command_response {
+                response.namespaces.iter().for_each(|ns| { namespaces.insert(ns.clone()); });
+            } else {
+                unreachable!()
+            }
+        });
+        Ok(namespaces)
     }
 
     fn translate_sql(
@@ -249,7 +251,7 @@ impl MongoQuery {
             MongoClusterType::Enterprise => {
                 // Get relevant namespaces
                 let namespaces: BTreeSet<Namespace> =
-                    Self::get_sql_query_namespaces(query, working_db)?;
+                    Self::get_sql_query_namespaces(query, client.databases.clone())?;
 
                 // Translate sql
                 let mongosql_translation =

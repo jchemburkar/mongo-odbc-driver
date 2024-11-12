@@ -4117,7 +4117,7 @@ pub unsafe extern "C" fn SQLTablePrivilegesW(
 
 #[allow(clippy::too_many_arguments)]
 fn sql_tables(
-    mongo_connection: &MongoConnection,
+    mongo_connection: &mut MongoConnection,
     query_timeout: i32,
     catalog: &str,
     schema: &str,
@@ -4182,9 +4182,9 @@ pub unsafe extern "C" fn SQLTablesW(
             let mongo_statement = sql_tables(
                 connection
                     .mongo_connection
-                    .read()
+                    .write()
                     .unwrap()
-                    .as_ref()
+                    .as_mut()
                     .unwrap(),
                 stmt.attributes
                     .read()
