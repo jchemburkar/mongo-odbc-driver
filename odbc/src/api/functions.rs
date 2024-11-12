@@ -3368,7 +3368,8 @@ fn sql_prepare(
         let attributes = connection.attributes.read().unwrap();
         let timeout = attributes.connection_timeout;
         let current_db = attributes.current_catalog.as_ref().cloned();
-        if let Some(mongo_connection) = connection.mongo_connection.read().unwrap().as_ref() {
+        if let Some(mongo_connection) = connection.mongo_connection.write().unwrap().as_mut() {
+            mongo_connection.databases = connection.databases.read().unwrap().clone();
             MongoQuery::prepare(
                 mongo_connection,
                 current_db,
@@ -4212,6 +4213,7 @@ pub unsafe extern "C" fn SQLTablesW(
             );
             let mongo_statement = odbc_unwrap!(mongo_statement, mongo_handle);
             *stmt.mongo_statement.write().unwrap() = Some(mongo_statement);
+            *connection.databases.write().unwrap() = connection.mongo_connection.read().unwrap().as_ref().unwrap().databases.clone();
             SqlReturn::SUCCESS
         },
         statement_handle

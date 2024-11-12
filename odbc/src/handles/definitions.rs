@@ -9,7 +9,7 @@ use mongo_odbc_core::TypeMode;
 use mongodb::bson::{Bson, Uuid};
 use std::{
     borrow::BorrowMut,
-    collections::{HashMap, HashSet},
+    collections::{BTreeSet, HashMap, HashSet},
     ptr::null_mut,
     sync::RwLock,
 };
@@ -284,6 +284,8 @@ pub struct Connection {
     pub type_mode: RwLock<TypeMode>,
     // max_string_length is the maximum character length of string data.
     pub max_string_length: RwLock<Option<u16>>,
+
+    pub databases: RwLock<BTreeSet<String>>,
 }
 
 #[derive(Debug, Default)]
@@ -322,6 +324,7 @@ impl Connection {
             errors: RwLock::new(vec![]),
             type_mode: RwLock::new(TypeMode::Simple),
             max_string_length: RwLock::new(None),
+            databases: RwLock::new(BTreeSet::new()),
         }
     }
 }
