@@ -41,17 +41,24 @@ pub struct MongoQuery {
 }
 
 impl MongoQuery {
-    fn get_sql_query_namespaces(sql_query: &str, databases: Vec<String>) -> Result<BTreeSet<Namespace>> {
+    fn get_sql_query_namespaces(
+        sql_query: &str,
+        databases: BTreeSet<String>,
+    ) -> Result<BTreeSet<Namespace>> {
+        log::info!("Databases: {:?}", databases);
         let mut namespaces = BTreeSet::new();
         databases.iter().for_each(|db| {
             let command = GetNamespaces::new(sql_query.to_string(), db.to_string());
             let command_response = libmongosqltranslate_run_command(command).unwrap();
             if let CommandResponse::GetNamespaces(response) = command_response {
-                response.namespaces.iter().for_each(|ns| { namespaces.insert(ns.clone()); });
+                response.namespaces.iter().for_each(|ns| {
+                    namespaces.insert(ns.clone());
+                });
             } else {
                 unreachable!()
             }
         });
+        log::info!("Namespaces: {:?}", namespaces);
         Ok(namespaces)
     }
 

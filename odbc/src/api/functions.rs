@@ -4135,14 +4135,25 @@ fn sql_tables(
             Ok(Box::new(MongoCollections::all_schemas(max_string_length)))
         }
         ("", "", "", SQL_ALL_TABLE_TYPES) => Ok(Box::new(MongoTableTypes::all_table_types())),
-        _ => Ok(Box::new(MongoCollections::list_tables(
-            mongo_connection,
-            Some(query_timeout),
-            catalog,
-            table,
-            table_t,
-            odbc_3_behavior,
-        ))),
+        _ => {
+            let colls = MongoCollections::list_tables(
+                mongo_connection,
+                Some(query_timeout),
+                catalog,
+                table,
+                table_t,
+                odbc_3_behavior,
+            );
+            colls
+                .collections_for_db_list
+                .iter()
+                .for_each(|collections_for_db| {
+                    mongo_connection
+                        .databases
+                        .insert(collections_for_db.database_name.clone());
+                });
+            Ok(Box::new(colls))
+        }
     }
 }
 

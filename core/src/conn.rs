@@ -16,7 +16,7 @@ use mongodb::{
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "garbage_collect")]
 use std::sync::Weak;
-use std::{sync::Arc, time::Duration};
+use std::{collections::BTreeSet, sync::Arc, time::Duration};
 use tokio::runtime::Runtime;
 
 // we make from UserOptions to Client and Weak<Runtime> so that we do not hold around
@@ -113,7 +113,7 @@ pub struct MongoConnection {
     /// client cluster type. Valid types are AtlasDataFederation and Enterprise
     pub cluster_type: MongoClusterType,
 
-    pub databases: Vec<String>,
+    pub databases: BTreeSet<String>,
 }
 
 impl MongoConnection {
@@ -267,7 +267,7 @@ impl MongoConnection {
             uuid_repr,
             runtime,
             cluster_type: type_of_cluster,
-            databases: vec![],
+            databases: BTreeSet::new(),
         };
 
         // Verify that the connection is working and the user has access to the default DB

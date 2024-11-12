@@ -6,7 +6,7 @@ pub use bson_type_info::MAX_STRING_SIZE;
 pub use bson_type_info::SQL_SEARCHABLE;
 
 mod collections;
-pub use collections::MongoCollections;
+pub use collections::{CollectionsForDb, MongoCollections};
 mod conn;
 pub use conn::MongoConnection;
 mod databases;

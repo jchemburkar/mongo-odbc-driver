@@ -222,10 +222,11 @@ impl MongoDatabases {
             .unwrap()
             .iter()
             .filter(|&db_name| !DISALLOWED_DB_NAMES.contains(&db_name.as_str()))
-            .map(|s| s.to_string())
+            .map(|s| {
+                mongo_connection.databases.insert(s.to_string());
+                s.to_string()
+            })
             .collect();
-
-        mongo_connection.databases = database_names.clone();
 
         MongoDatabases {
             database_names,
