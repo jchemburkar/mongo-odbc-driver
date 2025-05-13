@@ -1,0 +1,107 @@
+devenv          1ee0-2d1c	ENTER SQLAllocHandle 
+		SQLSMALLINT                  1 <SQL_HANDLE_ENV>
+		SQLHANDLE           0x0000000000000000
+		SQLHANDLE *         0x00000032250FCD68
+
+devenv          1ee0-2d1c	EXIT  SQLAllocHandle  with return code 0 (SQL_SUCCESS)
+		SQLSMALLINT                  1 <SQL_HANDLE_ENV>
+		SQLHANDLE           0x0000000000000000
+		SQLHANDLE *         0x00000032250FCD68 ( 0x00000223F1B8B480)
+
+devenv          1ee0-2d1c	ENTER SQLSetEnvAttr 
+		SQLHENV             0x00000223F1B8B480
+		SQLINTEGER                 200 <SQL_ATTR_ODBC_VERSION>
+		SQLPOINTER                 3 <SQL_OV_ODBC3>
+		SQLINTEGER                   0 
+
+devenv          1ee0-2d1c	EXIT  SQLSetEnvAttr  with return code 0 (SQL_SUCCESS)
+		SQLHENV             0x00000223F1B8B480
+		SQLINTEGER                 200 <SQL_ATTR_ODBC_VERSION>
+		SQLPOINTER                 3 <SQL_OV_ODBC3>
+		SQLINTEGER                   0 
+
+devenv          1ee0-2d1c	ENTER SQLAllocHandle 
+		SQLSMALLINT                  2 <SQL_HANDLE_DBC>
+		SQLHANDLE           0x00000223F1B8B480
+		SQLHANDLE *         0x00000032250FCD60
+
+devenv          1ee0-2d1c	EXIT  SQLAllocHandle  with return code 0 (SQL_SUCCESS)
+		SQLSMALLINT                  2 <SQL_HANDLE_DBC>
+		SQLHANDLE           0x00000223F1B8B480
+		SQLHANDLE *         0x00000032250FCD60 ( 0x00000223EE3B9B50)
+
+devenv          1ee0-2d1c	ENTER SQLDriverConnectW 
+		HDBC                0x00000223EE3B9B50
+		HWND                0x0000000000000000
+		WCHAR *             0x00007FF8FF64CF80 [      -3] "******\ 0"
+		SWORD                       -3 
+		WCHAR *             0x00007FF8FF64CF80 
+		SWORD                       -3 
+		SWORD *             0x0000000000000000
+		UWORD                        0 <SQL_DRIVER_NOPROMPT>
+
+devenv          1ee0-2d1c	EXIT  SQLDriverConnectW  with return code 1 (SQL_SUCCESS_WITH_INFO)
+		HDBC                0x00000223EE3B9B50
+		HWND                0x0000000000000000
+		WCHAR *             0x00007FF8FF64CF80 [      -3] "******\ 0"
+		SWORD                       -3 
+		WCHAR *             0x00007FF8FF64CF80 <Invalid buffer length!> [-3]
+		SWORD                       -3 
+		SWORD *             0x0000000000000000
+		UWORD                        0 <SQL_DRIVER_NOPROMPT>
+
+		DIAG [01000] The driver returned invalid (or failed to return) SQL_DRIVER_ODBC_VER: 03.80 (444) 
+
+devenv          1ee0-31e4	ENTER SQLAllocHandle 
+		SQLSMALLINT                  1 <SQL_HANDLE_ENV>
+		SQLHANDLE           0x0000000000000000
+		SQLHANDLE *         0x000000322427D1E8
+
+devenv          1ee0-31e4	EXIT  SQLAllocHandle  with return code 0 (SQL_SUCCESS)
+		SQLSMALLINT                  1 <SQL_HANDLE_ENV>
+		SQLHANDLE           0x0000000000000000
+		SQLHANDLE *         0x000000322427D1E8 ( 0x00000223F1B8B640)
+
+devenv          1ee0-31e4	ENTER SQLSetEnvAttr 
+		SQLHENV             0x00000223F1B8B640
+		SQLINTEGER                 200 <SQL_ATTR_ODBC_VERSION>
+		SQLPOINTER                 3 <SQL_OV_ODBC3>
+		SQLINTEGER                   0 
+
+devenv          1ee0-31e4	EXIT  SQLSetEnvAttr  with return code 0 (SQL_SUCCESS)
+		SQLHENV             0x00000223F1B8B640
+		SQLINTEGER                 200 <SQL_ATTR_ODBC_VERSION>
+		SQLPOINTER                 3 <SQL_OV_ODBC3>
+		SQLINTEGER                   0 
+
+devenv          1ee0-31e4	ENTER SQLAllocHandle 
+		SQLSMALLINT                  2 <SQL_HANDLE_DBC>
+		SQLHANDLE           0x00000223F1B8B640
+		SQLHANDLE *         0x000000322427D1E0
+
+devenv          1ee0-31e4	EXIT  SQLAllocHandle  with return code 0 (SQL_SUCCESS)
+		SQLSMALLINT                  2 <SQL_HANDLE_DBC>
+		SQLHANDLE           0x00000223F1B8B640
+		SQLHANDLE *         0x000000322427D1E0 ( 0x00000223F1B20010)
+
+devenv          1ee0-31e4	ENTER SQLDriverConnectW 
+		HDBC                0x00000223F1B20010
+		HWND                0x0000000000000000
+		WCHAR *             0x00007FF8FF64CF80 [      -3] "******\ 0"
+		SWORD                       -3 
+		WCHAR *             0x00007FF8FF64CF80 
+		SWORD                       -3 
+		SWORD *             0x0000000000000000
+		UWORD                        0 <SQL_DRIVER_NOPROMPT>
+
+devenv          1ee0-31e4	EXIT  SQLDriverConnectW  with return code 1 (SQL_SUCCESS_WITH_INFO)
+		HDBC                0x00000223F1B20010
+		HWND                0x0000000000000000
+		WCHAR *             0x00007FF8FF64CF80 [      -3] "******\ 0"
+		SWORD                       -3 
+		WCHAR *             0x00007FF8FF64CF80 <Invalid buffer length!> [-3]
+		SWORD                       -3 
+		SWORD *             0x0000000000000000
+		UWORD                        0 <SQL_DRIVER_NOPROMPT>
+
+		DIAG [01000] The driver returned invalid (or failed to return) SQL_DRIVER_ODBC_VER: 03.80 (444) 
