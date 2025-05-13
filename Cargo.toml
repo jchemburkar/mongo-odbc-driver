@@ -13,6 +13,7 @@ members = [
   "macos_postinstall",
   "mock_mongosqltranslate",
   "rfc8252_http_server",
+  "skunkworks_test_runner",
 ]
 
 

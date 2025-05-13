@@ -3530,6 +3530,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "skunkworks_test_runner"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "serde_yaml 0.9.34+deprecated",
+]
+
+[[package]]
 name = "slab"
 version = "0.4.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
