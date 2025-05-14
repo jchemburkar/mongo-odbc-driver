@@ -2,9 +2,17 @@ use std::fs;
 use std::path::Path;
 
 #[derive(Debug)]
+struct FunctionArg {
+    arg_type: String,
+    arg_value: String,
+    arg_out_value: String,
+}
+
+#[derive(Debug)]
 struct FunctionCall {
     function_name: String,
-    arguments: Vec<(String, String)>,
+    arguments: Vec<(String, String, String)>,
+    sql_return: String,
 }
 
 fn get_function_calls(contents: String) -> Vec<FunctionCall> {
