@@ -16,21 +16,34 @@ struct FunctionCall {
 }
 
 fn get_function_calls(contents: String) -> Vec<FunctionCall> {
-    let mut function_calls = Vec::new();
+    let mut function_calls: Vec<FunctionCall> = Vec::new();
     println!("{:?}", contents);
     let blocks: Vec<&str> = contents.split("\n\n").collect();
     println!("{:?}", blocks.len());
     for block in blocks {
         let lines: Vec<&str> = block.lines().collect();
-            if lines.len() < 4 {
-                continue;
-            }
-        let first_line = lines[0];
-        if !first_line.contains("ENTER") || first_line.contains("SQL_SUCCESS") || first_line.contains("SQL_SUCCESS_WITH_INFO") {
+        if lines.len() < 1 {
             continue;
         }
+        let first_line = lines[0];
         let words: Vec<&str> = first_line.split_whitespace().collect();
         if words.is_empty() {
+            continue;
+        }
+        if first_line.contains("EXIT") && (first_line.contains("SQL_SUCCESS") || first_line.contains("SQL_SUCCESS_WITH_INFO") || first_line.contains("SQL_ERROR")) {
+            if !function_calls.is_empty() {
+                if let Some(return_code_idx) = first_line.find("(SQL_") {
+                    let return_code_end = first_line[return_code_idx..].find(")");
+                    if let Some(end_idx) = return_code_end {
+                        let return_code = &first_line[return_code_idx..return_code_idx + end_idx + 1];
+                        let last_idx = function_calls.len() - 1;
+                        function_calls[last_idx].sql_return = return_code.to_string();
+                    }
+                }
+            }
+            continue;
+        }
+        if !first_line.contains("ENTER") {
             continue;
         }
         let function_name = words.last().unwrap().to_string();
@@ -58,11 +71,12 @@ fn get_function_calls(contents: String) -> Vec<FunctionCall> {
                     break;
                 }
             }
-            arguments.push((arg_type, arg_value));
+            arguments.push((arg_type, arg_value, String::new()));
         }
         function_calls.push(FunctionCall {
             function_name,
             arguments,
+            sql_return: String::new(),
         });
     }
     function_calls
