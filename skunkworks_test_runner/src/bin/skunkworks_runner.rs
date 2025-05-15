@@ -32,12 +32,54 @@ fn get_function_calls(contents: String) -> Vec<FunctionCall> {
         }
         if first_line.contains("EXIT") && (first_line.contains("SQL_SUCCESS") || first_line.contains("SQL_SUCCESS_WITH_INFO") || first_line.contains("SQL_ERROR")) {
             if !function_calls.is_empty() {
+                let last_idx = function_calls.len() - 1;
+                
                 if let Some(return_code_idx) = first_line.find("(SQL_") {
                     let return_code_end = first_line[return_code_idx..].find(")");
                     if let Some(end_idx) = return_code_end {
-                        let return_code = &first_line[return_code_idx..return_code_idx + end_idx + 1];
-                        let last_idx = function_calls.len() - 1;
+                        let return_code = &first_line[return_code_idx + 1..return_code_idx + end_idx];
                         function_calls[last_idx].sql_return = return_code.to_string();
+                    }
+                }
+                
+                let mut exit_args = Vec::new();
+                for i in 1..lines.len() {
+                    let line = lines[i].trim();
+                    let parts: Vec<&str> = line.split_whitespace().collect();
+                    if parts.len() < 2 {
+                        continue;
+                    }
+                    
+                    // Handle case where the first part is followed by an asterisk
+                    let mut arg_type = parts[0].to_string();
+                    let mut value_index = 1;
+                    if parts.len() > 1 && parts[1] == "*" {
+                        arg_type.push_str(" *");
+                        value_index = 2;
+                    }
+                    
+                    if value_index >= parts.len() {
+                        continue;
+                    }
+                    
+                    let mut arg_value = parts[value_index].to_string();
+                    for part in &parts[value_index+1..] {
+                        if part.starts_with("<") && part.ends_with(">") {
+                            arg_value = part.trim_start_matches("<").trim_end_matches(">").to_string();
+                            break;
+                        }
+                    }
+                    
+                    exit_args.push((arg_type, arg_value));
+                }
+                
+                for (i, (arg_type, arg_value)) in exit_args.iter().enumerate() {
+                    if i < function_calls[last_idx].arguments.len() {
+                        let (existing_type, existing_value, _) = &function_calls[last_idx].arguments[i];
+                        if existing_type == arg_type {
+                            function_calls[last_idx].arguments[i] = 
+                                (existing_type.clone(), existing_value.clone(), arg_value.clone());
+                        }
                     }
                 }
             }
