@@ -79,10 +79,23 @@ fn get_function_calls(contents: String) -> Vec<FunctionCall> {
                     }
                     
                     let mut arg_value = parts[value_index].to_string();
-                    for part in &parts[value_index+1..] {
-                        if part.starts_with("<") && part.ends_with(">") {
-                            arg_value = part.trim_start_matches("<").trim_end_matches(">").to_string();
-                            break;
+                    let line_str = lines[i].trim();
+                    if let Some(paren_start) = line_str.rfind('(') {
+                        if let Some(paren_end) = line_str.rfind(')') {
+                            if paren_start < paren_end {
+                                let paren_value = line_str[paren_start+1..paren_end].trim();
+                                if !paren_value.is_empty() {
+                                    arg_value = paren_value.to_string();
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        for part in &parts[value_index+1..] {
+                            if part.starts_with("<") && part.ends_with(">") {
+                                arg_value = part.trim_start_matches("<").trim_end_matches(">").to_string();
+                                break;
+                            }
                         }
                     }
                     
@@ -123,10 +136,23 @@ fn get_function_calls(contents: String) -> Vec<FunctionCall> {
                 continue;
             }
             let mut arg_value = parts[value_index].to_string();
-            for part in &parts[2..] {
-                if part.starts_with("<") && part.ends_with(">") {
-                    arg_value = part.trim_start_matches("<").trim_end_matches(">").to_string();
-                    break;
+            let line_str = lines[i].trim();
+            if let Some(paren_start) = line_str.rfind('(') {
+                if let Some(paren_end) = line_str.rfind(')') {
+                    if paren_start < paren_end {
+                        let paren_value = line_str[paren_start+1..paren_end].trim();
+                        if !paren_value.is_empty() {
+                            arg_value = paren_value.to_string();
+                        }
+                    }
+                }
+            }
+            else {
+                for part in &parts[value_index+1..] {
+                    if part.starts_with("<") && part.ends_with(">") {
+                        arg_value = part.trim_start_matches("<").trim_end_matches(">").to_string();
+                        break;
+                    }
                 }
             }
             arguments.push((arg_type, arg_value, String::new()));
@@ -145,12 +171,8 @@ unsafe fn test_function_calls(function_calls: Vec<FunctionCall>) {
     unsafe {
         let mut log_address_to_handle: BTreeMap<String, Handle> = BTreeMap::new();
         
-        for (i, function_call) in function_calls.iter().enumerate() {
-            // println!("Function call #{}: {}", i + 1, function_call.function_name);
-            // println!("  Return code: {:?}", function_call.sql_return);
-            // println!("  Number of arguments: {}", function_call.arguments.len());
+        for function_call in function_calls.iter() {
             if function_call.function_name == "SQLAllocHandle" {
-                println!("{:?}", function_call);
                 let handle_type = match function_call.arguments[0].1.as_str() {
                     "SQL_HANDLE_ENV" => 1,
                     "SQL_HANDLE_DBC" => 2,
@@ -166,9 +188,10 @@ unsafe fn test_function_calls(function_calls: Vec<FunctionCall>) {
                         *log_address_to_handle.get(addr).unwrap()
                     }
                 };
-                log_address_to_handle.insert(function_call.arguments[2].1.clone(), null_mut() as Handle);
-                let handle = function_call.arguments[1].1.clone();
-                SQLAllocHandle(handle_type, input_handle, log_address_to_handle.get_mut(&function_call.arguments[2].1).unwrap());
+                println!("{:?}", input_handle);
+                log_address_to_handle.insert(function_call.arguments[2].2.clone(), null_mut() as Handle);
+                let alloc_ret = SQLAllocHandle(handle_type, input_handle as *mut _, log_address_to_handle.get_mut(&function_call.arguments[2].2).unwrap());
+                println!("SQLAllocHandle return code: {:?}", alloc_ret);
 
             }
         }
