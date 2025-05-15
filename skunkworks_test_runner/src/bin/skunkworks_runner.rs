@@ -1,6 +1,11 @@
+use std::{collections::BTreeMap, ptr::null_mut};
 use std::fs;
 use std::path::Path;
-use definitions::SqlReturn;
+use definitions::{
+    Handle,
+    SqlReturn,
+    SQLAllocHandle
+};
 
 #[derive(Debug, Clone)]
 struct FunctionArg {
@@ -18,9 +23,9 @@ struct FunctionCall {
 
 fn get_function_calls(contents: String) -> Vec<FunctionCall> {
     let mut function_calls: Vec<FunctionCall> = Vec::new();
-    println!("{:?}", contents);
+    // println!("{:?}", contents);
     let blocks: Vec<&str> = contents.split("\n\n").collect();
-    println!("{:?}", blocks.len());
+    // println!("{:?}", blocks.len());
     for block in blocks {
         let lines: Vec<&str> = block.lines().collect();
         if lines.len() < 1 {
@@ -136,16 +141,49 @@ fn get_function_calls(contents: String) -> Vec<FunctionCall> {
 }
      
 
+unsafe fn test_function_calls(function_calls: Vec<FunctionCall>) {
+    unsafe {
+        let mut log_address_to_handle: BTreeMap<String, Handle> = BTreeMap::new();
+        
+        for (i, function_call) in function_calls.iter().enumerate() {
+            // println!("Function call #{}: {}", i + 1, function_call.function_name);
+            // println!("  Return code: {:?}", function_call.sql_return);
+            // println!("  Number of arguments: {}", function_call.arguments.len());
+            if function_call.function_name == "SQLAllocHandle" {
+                println!("{:?}", function_call);
+                let handle_type = match function_call.arguments[0].1.as_str() {
+                    "SQL_HANDLE_ENV" => 1,
+                    "SQL_HANDLE_DBC" => 2,
+                    "SQL_HANDLE_STMT" => 3,
+                    "SQL_HANDLE_DESC" => 4,
+                    _ => unreachable!()
+                };
+                let input_handle = match function_call.arguments[1].1.as_str() {
+                    "0x0000000000000000" => null_mut(),
+                    addr => {
+                        println!("addr: {}", addr);
+                        println!("log_address_to_handle: {:?}", log_address_to_handle);
+                        *log_address_to_handle.get(addr).unwrap()
+                    }
+                };
+                log_address_to_handle.insert(function_call.arguments[2].1.clone(), null_mut() as Handle);
+                let handle = function_call.arguments[1].1.clone();
+                SQLAllocHandle(handle_type, input_handle, log_address_to_handle.get_mut(&function_call.arguments[2].1).unwrap());
+
+            }
+        }
+    }
+}
+
 fn run_test_runner() {
     println!("Running test runner...");
 
     let file_path = Path::new("skunkworks_test_runner/testdata/ssis_trace.txt");
     let contents = fs::read_to_string(file_path).expect("error reading file");
     let function_calls = get_function_calls(contents);
-    // println!("Function calls: {:?}", function_calls);
-    println!("Function calls");
-    for function_call in function_calls {
-        println!("{:?}", function_call);
+    
+    unsafe {
+        test_function_calls(function_calls);
     }
 }
 
