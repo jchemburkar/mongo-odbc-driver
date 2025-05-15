@@ -1,18 +1,19 @@
 use std::fs;
 use std::path::Path;
+use definitions::SqlReturn;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct FunctionArg {
     arg_type: String,
     arg_value: String,
     arg_out_value: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct FunctionCall {
     function_name: String,
     arguments: Vec<(String, String, String)>,
-    sql_return: String,
+    sql_return: SqlReturn,
 }
 
 fn get_function_calls(contents: String) -> Vec<FunctionCall> {
@@ -37,8 +38,18 @@ fn get_function_calls(contents: String) -> Vec<FunctionCall> {
                 if let Some(return_code_idx) = first_line.find("(SQL_") {
                     let return_code_end = first_line[return_code_idx..].find(")");
                     if let Some(end_idx) = return_code_end {
-                        let return_code = &first_line[return_code_idx + 1..return_code_idx + end_idx];
-                        function_calls[last_idx].sql_return = return_code.to_string();
+                        let return_code_str = &first_line[return_code_idx + 1..return_code_idx + end_idx];
+                        let sql_return = match return_code_str {
+                            "SQL_SUCCESS" => SqlReturn::SUCCESS,
+                            "SQL_SUCCESS_WITH_INFO" => SqlReturn::SUCCESS_WITH_INFO,
+                            "SQL_ERROR" => SqlReturn::ERROR,
+                            "SQL_INVALID_HANDLE" => SqlReturn::INVALID_HANDLE,
+                            "SQL_STILL_EXECUTING" => SqlReturn::STILL_EXECUTING,
+                            "SQL_NEED_DATA" => SqlReturn::NEED_DATA,
+                            "SQL_NO_DATA" => SqlReturn::NO_DATA,
+                            _ => SqlReturn::SUCCESS, // Default to SUCCESS if unknown
+                        };
+                        function_calls[last_idx].sql_return = sql_return;
                     }
                 }
                 
@@ -118,7 +129,7 @@ fn get_function_calls(contents: String) -> Vec<FunctionCall> {
         function_calls.push(FunctionCall {
             function_name,
             arguments,
-            sql_return: String::new(),
+            sql_return: SqlReturn::SUCCESS,
         });
     }
     function_calls

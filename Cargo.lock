@@ -3533,6 +3533,7 @@ dependencies = [
 name = "skunkworks_test_runner"
 version = "0.0.0"
 dependencies = [
+ "definitions",
  "serde",
  "serde_json",
  "serde_yaml 0.9.34+deprecated",
